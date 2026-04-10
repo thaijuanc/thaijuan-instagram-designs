@@ -149,17 +149,42 @@ function writeNotification(post, postId) {
   log(`📬 Notification written to ${NOTIFICATION_PATH}`);
 }
 
+// Fetch Instagram permalink (shortcode URL)
+async function fetchInstagramPermalink(postId, config) {
+  const url = `https://graph.facebook.com/v18.0/${postId}?fields=permalink&access_token=${config.instagram.accessToken}`;
+  
+  return new Promise((resolve, reject) => {
+    https.get(url, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try {
+          const result = JSON.parse(data);
+          resolve(result.permalink || `https://www.instagram.com/p/${postId}/`);
+        } catch (e) {
+          resolve(`https://www.instagram.com/p/${postId}/`);
+        }
+      });
+    }).on('error', () => {
+      resolve(`https://www.instagram.com/p/${postId}/`);
+    });
+  });
+}
+
 // Send Discord webhook notification (INSTANT)
-async function sendDiscordWebhook(post, postId) {
+async function sendDiscordWebhook(post, postId, config) {
+  // Fetch the actual Instagram permalink
+  const instagramUrl = await fetchInstagramPermalink(postId, config);
+  
   const webhookUrl = process.env.DISCORD_WEBHOOK_URL || 'https://discord.com/api/webhooks/1492002779021971457/YOUR_WEBHOOK_TOKEN';
   
   const message = {
-    content: `✅ **Post Published!**\n\n📌 **${post.headline}**\n🎯 ${post.promotion}\n🔗 https://www.instagram.com/p/${postId}\n\nPosted at ${new Date().toLocaleTimeString('en-AU', { timeZone: 'Australia/Melbourne' })}`
+    content: `✅ **Post Published!**\n\n📌 **${post.headline}**\n🎯 ${post.promotion}\n🔗 ${instagramUrl}\n\nPosted at ${new Date().toLocaleTimeString('en-AU', { timeZone: 'Australia/Melbourne' })}`
   };
   
   try {
     await apiPost(webhookUrl, JSON.stringify(message));
-    log(`💬 Discord notification sent!`);
+    log(`💬 Discord notification sent! ${instagramUrl}`);
   } catch (error) {
     log(`⚠️ Discord webhook failed: ${error.message}`);
   }
@@ -221,7 +246,7 @@ async function main() {
         writeNotification(post, postId);
         
         // Send Discord webhook (INSTANT notification)
-        await sendDiscordWebhook(post, postId);
+        await sendDiscordWebhook(post, postId, config);
 
       } catch (error) {
         log(`   ❌ ERROR: ${error.message}`);
