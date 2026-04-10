@@ -177,6 +177,17 @@
       "scheduledTime": "14:40",
       "posted": true,
       "postId": "18104812327928554"
+    },
+    {
+      "day": "1i",
+      "date": "2026-04-10",
+      "dayOfWeek": "Friday",
+      "headline": "EARLY BIRD DINNER",
+      "promotion": "20% OFF All Mains",
+      "fullCaption": "Early bird special! 🍽️ 20% OFF all main dishes — order before 6 PM!\n\nPad Thai, Curries, Stir-fries, and more. Dine-in or takeaway.\n\n📍 ThaiJuan, Surry Hills\n⏰ Valid 3:00 PM - 6 PM today\n\n#EarlyBird #ThaiJuan #SydneyFoodie #DinnerDeal #SurryHills #ThaiFood #SydneyEats #FoodDiscount #ThaiRestaurant #SydneyDinner",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/early-bird-255pm.png",
+      "scheduledTime": "15:00",
+      "posted": false
     }
   ]
 }
