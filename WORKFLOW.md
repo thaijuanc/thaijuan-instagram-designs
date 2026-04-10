@@ -97,6 +97,33 @@
 
 ---
 
+## 🔐 Token Management
+
+### Auto-Refresh System
+
+**Script:** `auto-refresh-token.js`  
+**Schedule:** Every 3 hours (cron: `0 */3 * * *`)  
+**Log:** `/tmp/thaijuan-token-refresh.log`
+
+**How it works:**
+1. Checks current token expiry time
+2. If expires in < 30 minutes → refreshes automatically
+3. Updates `~/.mcporter/credentials.json` with new tokens
+4. Logs success/failure
+
+**Manual refresh (if needed):**
+```bash
+mcporter auth canva-mcp --reset
+mcporter auth canva-mcp
+```
+
+**Token lifespan:**
+- Access token: 3.5 hours (12,600 seconds)
+- Refresh token: ~1 year (Canva-managed)
+- Auto-refresh: Runs every 3 hours (proactive)
+
+---
+
 ## 📁 Key Files
 
 - `campaign-schedule.json` — 7-day campaign schedule
@@ -116,6 +143,7 @@
 | Instagram Graph API | ✅ | Posting via Facebook API |
 | Google Calendar | ✅ | Events with image attachments |
 | Cron | ✅ | Auto-posting every minute |
+| **Token Auto-Refresh** | ✅ | Refreshes OAuth tokens every 3 hours |
 
 ---
 
