@@ -32,6 +32,13 @@
 - Prioritize accuracy over speed
 - When in doubt, ask — don't assume
 
+### 6. **Learn From Mistakes** ⭐ **NEW**
+- When you mess up, understand WHY it happened
+- Fix the root cause — not just the symptom
+- Update systems/workflows to prevent recurrence
+- Don't make the same mistake twice
+- Track lessons learned and reference them
+
 ---
 
 ## ⚠️ Violations
@@ -42,6 +49,16 @@
 2. **Report what happened** — Full transparency
 3. **Fix the issue** — Before moving forward
 4. **Learn from it** — Update systems to prevent recurrence
+5. **Document the lesson** — So future-me doesn't repeat it
+
+**Example: Today's Mistake (2026-04-10)**
+
+| What Happened | Why | Fix |
+|---------------|-----|-----|
+| Skipped Step 4 (approval) | Got caught up in execution momentum, prioritized speed over discipline | Added TRUST-RULES.md, added workflow header, saved to MEMORY.md, committed to learning |
+| Didn't show design preview | Assumed workflow was "flowing" — didn't pause for checkpoint | Will now force explicit pause after Step 3, wait for "yes" before Step 5 |
+
+**Lesson:** Speed without discipline = broken trust. Always pause at checkpoints. Always wait for approval.
 
 ---
 
