@@ -1,31 +1,25 @@
 # ThaiJuan Instagram — Notification Rules
 
-**Version:** 1.0  
+**Version:** 2.0  
 **Date:** 2026-04-10  
 **Status:** ACTIVE
 
 ---
 
-## 🎯 **Golden Rule: ONE Notification Only**
+## 🎯 **Golden Rule: ALWAYS Send DM**
 
-**If one notification method succeeds, the other does NOT trigger.**
+**Every post gets a Discord DM notification. No exceptions.**
 
-No duplicates. No spam. Just one clean notification per post.
+No webhooks. No duplicates. Just one clean DM per post.
 
 ---
 
-## 📋 **Notification Methods**
+## 📋 **Notification Method**
 
-### **Method 1: Discord Webhook (Instant)**
-- **When:** Immediately after post goes live
-- **Where:** Discord channel (requires webhook URL)
-- **Timing:** Instant (same second as posting)
-- **Status:** ⚠️ Requires Discord server channel
-
-### **Method 2: Subagent DM (Delayed)**
-- **When:** 2 minutes after scheduled post time
+### **Subagent DM (1 Minute Delay)**
+- **When:** 1 minute after scheduled post time
 - **Where:** Juan's Discord DM
-- **Timing:** 2-5 minute delay
+- **Timing:** ~1 minute delay
 - **Status:** ✅ Active and working
 
 ---
@@ -33,65 +27,18 @@ No duplicates. No spam. Just one clean notification per post.
 ## 🔀 **How It Works:**
 
 ```
-Post goes live (e.g., 6:30 PM)
+Post goes live (e.g., 7:45 PM)
   ↓
 instagram-poster.js writes to message-pending.json
   ↓
-instagram-poster.js sends Discord webhook (if configured)
+Subagent wakes at 7:46 PM (1 minute later)
   ↓
-Sets: post.notificationSent = true
+Subagent reads message-pending.json
   ↓
-Subagent wakes at 6:32 PM
+Subagent sends Discord DM with post link
   ↓
-Subagent checks: Was notification already sent?
-  ↓
-If YES → Skip (no duplicate)
-If NO → Send Discord DM
+You get notified! ✅
 ```
-
----
-
-## ✅ **Preventing Duplicates:**
-
-### **In instagram-poster.js:**
-
-After sending webhook:
-```javascript
-post.notificationSent = true;
-```
-
-### **In Subagent Instructions:**
-
-```
-Before sending notification:
-1. Check campaign-schedule.json
-2. Look for post.notificationSent flag
-3. If true → SKIP (already notified)
-4. If false → Send Discord DM
-```
-
----
-
-## 📊 **Current Configuration:**
-
-| Method | Enabled | Notes |
-|--------|---------|-------|
-| Discord Webhook | ⚠️ Configured but needs webhook URL | Instant if URL is set |
-| Subagent DM | ✅ Active | 2-5 min delay, always works |
-
----
-
-## 🎯 **Expected Behavior:**
-
-**With Discord webhook URL configured:**
-- Post goes live → Webhook fires instantly ✅
-- Subagent wakes → Sees `notificationSent = true` → Skips ✅
-- **Result:** 1 notification (instant)
-
-**Without Discord webhook URL:**
-- Post goes live → Webhook fails silently
-- Subagent wakes → Sees `notificationSent = false` → Sends DM ✅
-- **Result:** 1 notification (2-5 min delay)
 
 ---
 
@@ -99,12 +46,27 @@ Before sending notification:
 
 | Event | Time |
 |-------|------|
-| Post scheduled | e.g., 6:30 PM |
-| Post goes live | 6:30 PM (exact) |
-| Webhook fires | 6:30:01 PM (instant) |
-| Subagent wakes | 6:32 PM (2 min later) |
-| Subagent sends DM | 6:32-6:35 PM (if webhook didn't fire) |
+| Post scheduled | e.g., 7:45 PM |
+| Post goes live | 7:45 PM (exact) |
+| Subagent wakes | 7:46 PM (1 min later) |
+| Subagent sends DM | 7:46-7:47 PM |
 
 ---
 
-**This system ensures: ONE notification, no duplicates, no spam.**
+## 📝 **Subagent Instructions:**
+
+```
+Wait until (scheduled time + 1 minute):
+1. Check campaign-schedule.json for the post
+2. Get the Instagram URL from campaign-state.json
+3. Send Discord DM to Juan with:
+   - Post headline
+   - Promotion
+   - Instagram link
+   - Posted time
+4. Confirm and exit
+```
+
+---
+
+**This system ensures: ALWAYS notified, ~1 minute delay, no spam.**
