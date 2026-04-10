@@ -171,25 +171,6 @@ async function fetchInstagramPermalink(postId, config) {
   });
 }
 
-// Send Discord webhook notification (INSTANT)
-async function sendDiscordWebhook(post, postId, config) {
-  // Fetch the actual Instagram permalink
-  const instagramUrl = await fetchInstagramPermalink(postId, config);
-  
-  const webhookUrl = process.env.DISCORD_WEBHOOK_URL || 'https://discord.com/api/webhooks/1492002779021971457/YOUR_WEBHOOK_TOKEN';
-  
-  const message = {
-    content: `✅ **Post Published!**\n\n📌 **${post.headline}**\n🎯 ${post.promotion}\n🔗 ${instagramUrl}\n\nPosted at ${new Date().toLocaleTimeString('en-AU', { timeZone: 'Australia/Melbourne' })}`
-  };
-  
-  try {
-    await apiPost(webhookUrl, JSON.stringify(message));
-    log(`💬 Discord notification sent! ${instagramUrl}`);
-  } catch (error) {
-    log(`⚠️ Discord webhook failed: ${error.message}`);
-  }
-}
-
 // Main function
 async function main() {
   log('🚀 ThaiJuan Instagram Poster (Simple)');
@@ -242,16 +223,9 @@ async function main() {
         state.lastPostId = postId;
         state.updatedAt = new Date().toISOString();
 
-        // Write notification
+        // Write notification for subagent to send
         writeNotification(post, postId);
-        
-        // Send Discord webhook (INSTANT notification)
-        // Note: This sets notification_sent = true, so subagent won't send duplicate
-        await sendDiscordWebhook(post, postId, config);
-        
-        // Mark notification as sent (prevents subagent duplicate)
-        post.notificationSent = true;
-        log(`   📬 Notification sent via webhook`);
+        log(`   📬 Notification queued for subagent DM`);
 
       } catch (error) {
         log(`   ❌ ERROR: ${error.message}`);
