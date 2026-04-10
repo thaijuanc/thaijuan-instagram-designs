@@ -14,6 +14,14 @@
 - Write caption
 - Write hashtags
 - Define visual direction for Canva
+- **Define scheduled time** (when should this post?)
+
+### Step 2: Generate Canva Design
+- Define headline
+- Define promotion/offer
+- Write caption
+- Write hashtags
+- Define visual direction for Canva
 
 ### Step 2: Generate Canva Design
 - Use `mcporter call canva-mcp.generate-design`
@@ -37,6 +45,13 @@
 - Include: summary, time, caption, Canva edit link, image attachment
 - Event serves as record + visual calendar
 
+### Step 5b: Add to Scheduler (for future posts)
+- **If post is for future time:** Add to `campaign-schedule.json`
+- Set `scheduledTime` and `date`
+- Set `posted: false`
+- Cron will auto-post at the scheduled time
+- **If post is immediate:** Skip to Step 6
+
 ### Step 6: Post to Instagram
 - Use Instagram Graph API via `poster.js` or `test-post.js`
 - Create media container
@@ -44,11 +59,12 @@
 - Publish media
 - Capture post ID
 
-### Step 7: Notify User
-- Send confirmation message
-- Include Instagram post URL
-- Include post ID
-- Confirm completion
+### Step 7: Notify User (Automatic)
+- **Auto-poster writes to:** `notification-pending.json`
+- **Heartbeat checker runs:** Every 2 minutes
+- **Heartbeat reads notification** and alerts Juan
+- **Includes:** Instagram post URL, post ID, headline, promotion
+- **Confirms:** Post is live and on time
 
 ### Step 8: Update State
 - Update `campaign-state.json`
