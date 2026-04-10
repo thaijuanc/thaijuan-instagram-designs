@@ -14,6 +14,9 @@
 4. **Test Things Properly** — Verify before reporting success
 5. **Be Trustworthy** — Accuracy > speed
 6. **Learn From Mistakes** — Never repeat the same error
+7. **Mobile-First Formatting** — No extra blank lines, no decorative dashes, compact scannable content
+
+**Files:** /Users/fenton/.openclaw/workspace/TRUST-RULES.md, /Users/fenton/.openclaw/workspace/memory/2026-04-10.md
 
 **File:** `/Users/fenton/.openclaw/workspace/TRUST-RULES.md`
 
@@ -40,18 +43,25 @@ Visual: "Epic Thai platter spread, bold colors..."
 Scheduled: 3:56 PM today
 ```
 
+**🛑 WAIT FOR APPROVAL**
+- Show draft to Juan
+- **DO NOT proceed until Juan approves the content draft**
+
 ---
 
 ### Step 2: Generate Canva Design ⏱️ ~1 min
+**After Step 1 approval:**
 **Command:**
 ```bash
 mcporter call canva-mcp.generate-design --timeout 120000 --args '{"query": "[visual direction]","design_type": "instagram_post","user_intent": "[description]"}'
 ```
 
 **Output:**
-- 4 design candidates
-- Select best one
-- Get `candidate_id`
+- 4 design candidates with thumbnails
+- **Show ALL 4 options to Juan with Canva URLs + thumbnail images**
+- Juan picks one (1-4)
+- Convert selected candidate: `create-design-from-candidate`
+- Get `design_id` and `job_id`
 
 ---
 
@@ -81,7 +91,7 @@ git push
 ---
 
 ### Step 4: ⏸️ HARD CHECKPOINT — Show Preview & WAIT ⏱️ ∞
-**What:** Show Juan the design and **WAIT FOR APPROVAL**
+**What:** Show Juan the complete preview and **WAIT FOR PUBLISHING APPROVAL**
 
 **Output to Juan:**
 ```markdown
