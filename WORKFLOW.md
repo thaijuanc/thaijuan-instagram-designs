@@ -6,6 +6,22 @@
 
 ---
 
+## 🎯 TRUST RULES (Overarching Principles)
+
+**These rules apply to ALL workflows:**
+
+1. **Don't Skip Steps** — Follow workflows exactly as defined
+2. **Don't Make Things Up** — If you don't know, say you don't know
+3. **Don't Lie** — Be honest about mistakes immediately
+4. **Test Things Properly** — Verify before reporting success
+5. **Be Trustworthy** — Prioritize accuracy over speed
+
+**File:** `/Users/fenton/.openclaw/workspace/TRUST-RULES.md`
+
+**Violating these rules breaks trust. Trust is non-negotiable.**
+
+---
+
 ## 📋 Complete Workflow (8 Steps)
 
 ### Step 1: Draft Content
