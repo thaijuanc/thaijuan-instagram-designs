@@ -246,7 +246,12 @@ async function main() {
         writeNotification(post, postId);
         
         // Send Discord webhook (INSTANT notification)
+        // Note: This sets notification_sent = true, so subagent won't send duplicate
         await sendDiscordWebhook(post, postId, config);
+        
+        // Mark notification as sent (prevents subagent duplicate)
+        post.notificationSent = true;
+        log(`   📬 Notification sent via webhook`);
 
       } catch (error) {
         log(`   ❌ ERROR: ${error.message}`);
