@@ -1,0 +1,181 @@
+{
+  "campaign": "7-Day Launch Campaign",
+  "startDate": "2026-04-10",
+  "endDate": "2026-04-16",
+  "timezone": "Australia/Melbourne",
+  "posts": [
+    {
+      "day": 1,
+      "date": "2026-04-10",
+      "dayOfWeek": "Friday",
+      "headline": "FRIDAY KICKOFF",
+      "promotion": "Combo Deal $25 - Pad Thai + Curry",
+      "fullCaption": "Friday starts with flavor. 🍛🍜 Pad Thai + Curry combo for $25. Because one dish is never enough.\n\n📍 ThaiJuan, Surry Hills\n\n#FridayKickoff #ThaiJuan #SydneyFoodie #ComboDeal #ThaiFood #SurryHills #SydneyEats #ThaiCurry #PadThai #FridayVibes",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/day1-friday.png",
+      "scheduledTime": "09:00",
+      "posted": true,
+      "postId": "17945030958156043"
+    },
+    {
+      "day": "1b",
+      "date": "2026-04-10",
+      "dayOfWeek": "Friday",
+      "headline": "LUNCH PREVIEW",
+      "promotion": "Coming Soon at Noon",
+      "fullCaption": "Lunch preview! 🍽️ Something delicious coming your way at noon. Fresh, hot, and ready for your lunch break.\n\n📍 ThaiJuan, Surry Hills\n\n#LunchPreview #ThaiJuan #SydneyFoodie #ComingSoon #SurryHills #ThaiFood #SydneyLunch #SydneyEats #LunchTime #FoodTeaser",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/lunch-preview-10am.png",
+      "scheduledTime": "10:00",
+      "posted": true,
+      "postId": "18116539282708973"
+    },
+    {
+      "day": "1c",
+      "date": "2026-04-10",
+      "dayOfWeek": "Friday",
+      "headline": "CHEF'S SPECIAL",
+      "promotion": "$5 OFF Panang Curry — Today Only",
+      "fullCaption": "Chef's choice today! 🍛 Rich, creamy Panang curry with tender beef and Thai basil. Comfort in every spoonful.\n\n$5 OFF Panang Curry — today only!\n\n📍 ThaiJuan, Surry Hills\n\n#ChefsSpecial #ThaiJuan #PanangCurry #SydneyFoodie #ThaiCurry #SurryHills #ThaiFood #SydneyEats #CurryLover #TodayOnly",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/chefs-special-panang.png",
+      "scheduledTime": "10:30",
+      "posted": true,
+      "postId": "17951127923994576"
+    },
+    {
+      "day": "1c",
+      "date": "2026-04-10",
+      "dayOfWeek": "Friday",
+      "headline": "AFTERNOON DELIGHT",
+      "promotion": "Afternoon Tea Special 2-4 PM",
+      "fullCaption": "Afternoon delight! 🫖 Traditional Thai desserts and drinks. Perfect for your 2-4 PM break. Sweet, creamy, and utterly satisfying.\n\n📍 ThaiJuan, Surry Hills\n\n#AfternoonDelight #ThaiJuan #SydneyFoodie #AfternoonTea #ThaiDessert #SurryHills #SweetTooth #SydneySweets #ThaiTreats #AfternoonSpecial",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/afternoon-delight-1020am.png",
+      "scheduledTime": "10:20",
+      "posted": true,
+      "postId": "18156287695397926"
+    },
+    {
+      "day": "1d",
+      "date": "2026-04-10",
+      "dayOfWeek": "Friday",
+      "headline": "NOTIFICATION TEST",
+      "promotion": "Testing notification system - 5 min delay",
+      "fullCaption": "Notification system test! 🔔 This is a test post to verify the notification workflow. You should receive a notification when this posts.\n\n📍 ThaiJuan, Surry Hills\n\n#NotificationTest #ThaiJuan #SystemTest #Automation #SurryHills #ThaiFood #SydneyEats #Testing #InstagramAutomation",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/notification-test-1133am.png",
+      "scheduledTime": "11:33",
+      "posted": true,
+      "postId": "17903062404243259"
+    },
+    {
+      "day": "1e",
+      "date": "2026-04-10",
+      "dayOfWeek": "Friday",
+      "headline": "NOTIFICATION TEST 2",
+      "promotion": "Final notification system test - 11:45 AM",
+      "fullCaption": "Final notification test! 🔔 This verifies the notification system is working correctly with 1-minute cron checks. You should receive a notification when this posts at 11:45 AM.\n\n📍 ThaiJuan, Surry Hills\n\n#NotificationTest #ThaiJuan #SystemTest #Automation #SurryHills #ThaiFood #SydneyEats #Testing #InstagramAutomation",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/notification-test2-1145am.png",
+      "scheduledTime": "11:45",
+      "posted": true,
+      "postId": "18085463810033761"
+    },
+    {
+      "day": "1f",
+      "date": "2026-04-10",
+      "dayOfWeek": "Friday",
+      "headline": "5 MINUTE NOTIFICATION TEST",
+      "promotion": "Testing 5-minute delay notification",
+      "fullCaption": "5-minute notification test! ⏰ This tests the notification system with a 5-minute delay. You should receive a notification when this posts at 11:57 AM.\n\n📍 ThaiJuan, Surry Hills\n\n#NotificationTest #ThaiJuan #SystemTest #Automation #SurryHills #ThaiFood #SydneyEats #Testing #InstagramAutomation",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/5min-test-1157am.png",
+      "scheduledTime": "11:57",
+      "posted": true,
+      "postId": "17884954434496090"
+    },
+    {
+      "day": "1g",
+      "date": "2026-04-10",
+      "dayOfWeek": "Friday",
+      "headline": "MIDDAY SPECIAL",
+      "promotion": "3 Spring Rolls $15 — Today Only",
+      "fullCaption": "Midday special! 🥬 Fresh spring rolls with peanut dipping sauce. Light, healthy, and perfect for lunch. 3 for $15 — today only!\n\n📍 ThaiJuan, Surry Hills\n\n#MiddaySpecial #ThaiJuan #SpringRolls #SydneyFoodie #HealthyEats #SurryHills #ThaiFood #SydneyLunch #FreshFood #TodayOnly",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/midday-special-1245pm.png",
+      "scheduledTime": "12:45",
+      "posted": true,
+      "postId": "17915288289357181"
+    },
+    {
+      "day": 2,
+      "date": "2026-04-11",
+      "dayOfWeek": "Saturday",
+      "headline": "WEEKEND WARRIOR",
+      "promotion": "FREE Drink with Spice Level 5+",
+      "fullCaption": "You asked for spicy. We brought the heat. 🔥 FREE drink with any Level 5+ dish. Can you handle it?\n\n📍 ThaiJuan, Surry Hills\n\n#WeekendWarrior #ThaiJuan #SpicyFood #PadKrapow #SydneyFoodie #SurryHills #ThaiStreetFood #HeatSeeker #SaturdayVibes #SydneyEats",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/day2-saturday.png",
+      "scheduledTime": "09:00",
+      "posted": false
+    },
+    {
+      "day": 3,
+      "date": "2026-04-12",
+      "dayOfWeek": "Sunday",
+      "headline": "SUNDAY SOCIAL",
+      "promotion": "Share Platter $79 (4 Dishes)",
+      "fullCaption": "Good food. Good friends. Good times. 🥂 Share Platter: 4 dishes for $79. Tag your Sunday crew.\n\n📍 ThaiJuan, Surry Hills\n\n#SundaySocial #ThaiJuan #SharePlatter #SydneyFoodie #FriendsWhoEat #SurryHills #ThaiFood #GroupDining #SundayVibes #SydneyEats",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/day3-sunday.png",
+      "scheduledTime": "09:00",
+      "posted": false
+    },
+    {
+      "day": 4,
+      "date": "2026-04-13",
+      "dayOfWeek": "Monday",
+      "headline": "MONDAY MOTIVATION",
+      "promotion": "15% OFF All Curries",
+      "fullCaption": "Monday motivation: curry solves everything. 🍛 15% OFF all curries. Because you deserve comfort food.\n\n📍 ThaiJuan, Surry Hills\n\n#MondayMotivation #ThaiJuan #GreenCurry #SydneyFoodie #CurryLover #SurryHills #ThaiFood #MondaySpecial #SydneyEats #ComfortFood",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/day4-monday.png",
+      "scheduledTime": "09:00",
+      "posted": false
+    },
+    {
+      "day": 5,
+      "date": "2026-04-14",
+      "dayOfWeek": "Tuesday",
+      "headline": "THAI TUESDAY",
+      "promotion": "3 Lettuce Wraps $18",
+      "fullCaption": "It's Thai Tuesday! 🌿 Crispy lettuce wraps with spicy larb filling. 3 for $18. Light, fresh, flavorful.\n\n📍 ThaiJuan, Surry Hills\n\n#ThaiTuesday #ThaiJuan #Larb #SydneyFoodie #HealthyEats #SurryHills #ThaiSalad #LightBites #TuesdaySpecial #SydneyEats",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/day5-tuesday.png",
+      "scheduledTime": "09:00",
+      "posted": false
+    },
+    {
+      "day": 6,
+      "date": "2026-04-15",
+      "dayOfWeek": "Wednesday",
+      "headline": "WEDNESDAY WOK-OUT",
+      "promotion": "$8 OFF Any Noodle Dish",
+      "fullCaption": "Midweek calls for noodles. 🍜 $8 OFF any noodle dish. Drunken noodles, pad thai, or your favorite.\n\n📍 ThaiJuan, Surry Hills\n\n#WokWednesday #ThaiJuan #DrunkenNoodles #SydneyFoodie #NoodleLover #SurryHills #ThaiStreetFood #WednesdaySpecial #SydneyEats #PadKeeMao",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/day6-wednesday.png",
+      "scheduledTime": "09:00",
+      "posted": false
+    },
+    {
+      "day": 7,
+      "date": "2026-04-16",
+      "dayOfWeek": "Thursday",
+      "headline": "TGIT - Thank Goodness It's Thai",
+      "promotion": "FREE Soup Upgrade to Large",
+      "fullCaption": "Thank Goodness It's Thai! 🍲 FREE soup upgrade to large. Our famous Tom Yum, now even bigger.\n\n📍 ThaiJuan, Surry Hills\n\n#TGIT #ThaiJuan #TomYum #SydneyFoodie #SoupSeason #SurryHills #ThaiSoup #ThursdaySpecial #SydneyEats #SpicySoup",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/day7-thursday.png",
+      "scheduledTime": "09:00",
+      "posted": false
+    },
+    {
+      "day": "1h",
+      "date": "2026-04-10",
+      "dayOfWeek": "Friday",
+      "headline": "HAPPY HOUR SPECIAL",
+      "promotion": "$8 Cocktails + $6 Beer",
+      "fullCaption": "Happy hour! 🍹 $8 cocktails + $6 beer — every afternoon!\n\nMojitos, Margaritas, Singha Beer, and more. Perfect with our pad thai!\n\n📍 ThaiJuan, Surry Hills\n⏰ Available from 2:40 PM today\n\n#HappyHour #ThaiJuan #SydneyFoodie #Cocktails #SurryHills #ThaiFood #SydneyDrinks #BeerSpecial #AfternoonVibes #SydneyEats",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/happy-hour-240pm.png",
+      "scheduledTime": "14:40",
+      "posted": false
+    }
+  ]
+}
