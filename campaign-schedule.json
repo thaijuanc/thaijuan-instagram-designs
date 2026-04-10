@@ -189,6 +189,17 @@
       "scheduledTime": "15:00",
       "posted": true,
       "postId": "17922809745291188"
+    },
+    {
+      "day": "1k",
+      "date": "2026-04-10",
+      "dayOfWeek": "Friday",
+      "headline": "TGI-FRIDAY THAI STYLE",
+      "promotion": "$20 OFF Orders $80+",
+      "fullCaption": "TGI-FRIDAY! 🎉 Big feast, big savings!\n\n$20 OFF when you spend $80+ — tonight only (6-9 PM)!\n\nLoad up on your faves: Pad Thai, Green Curry, Crispy Prawns, Mango Sticky Rice... Go big!\n\n📍 ThaiJuan, Surry Hills\n🍛 Dine-in or takeaway\n⏰ Tonight 6-9 PM only\n\n#TGIFriday #ThaiJuan #SydneyFoodie #FridayDeal #SurryHills #ThaiFood #SydneyEats #FridayNight #FoodDeal #SydneyDinner #FeastMode",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/tgi-friday-420pm.png",
+      "scheduledTime": "16:20",
+      "posted": false
     }
   ]
 }
