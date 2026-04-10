@@ -1,0 +1,11 @@
+{
+  "campaign": "7-Day Launch Campaign + Midday Special + Flash Sale Test + Friday Feast Test",
+  "nextPostDay": 9,
+  "lastPostDate": "2026-04-10",
+  "lastPostId": "18104812327928554",
+  "completed": false,
+  "completedDate": null,
+  "createdAt": "2026-04-09T22:51:00+10:00",
+  "updatedAt": "2026-04-10T14:22:00+10:00",
+  "notes": "Full 8-step workflow tested successfully. Posts published: Flash Sale (13:53), BOGO (14:09), Friday Feast (14:22). Next scheduled: Day 2 (Saturday 9AM)"
+}
