@@ -1,24 +1,24 @@
 # ThaiJuan Instagram — Notification Rules
 
-**Version:** 2.0  
+**Version:** 3.0  
 **Date:** 2026-04-10  
 **Status:** ACTIVE
 
 ---
 
-## 🎯 **Golden Rule: ALWAYS Send DM**
+## 🎯 **Golden Rule: Main Agent Sends DM**
 
-**Every post gets a Discord DM notification. No exceptions.**
+**Every post gets a Discord DM notification from the main agent.**
 
-No webhooks. No duplicates. Just one clean DM per post.
+Subagents can't send messages — only the main agent can.
 
 ---
 
 ## 📋 **Notification Method**
 
-### **Subagent DM (1 Minute Delay)**
+### **Main Agent DM (1 Minute Delay)**
 - **When:** 1 minute after scheduled post time
-- **Where:** Juan's Discord DM
+- **Where:** Juan's Discord DM (via sessions_send)
 - **Timing:** ~1 minute delay
 - **Status:** ✅ Active and working
 
@@ -33,9 +33,13 @@ instagram-poster.js writes to message-pending.json
   ↓
 Subagent wakes at 7:46 PM (1 minute later)
   ↓
-Subagent reads message-pending.json
+Subagent reads message-pending.json + campaign-state.json
   ↓
-Subagent sends Discord DM with post link
+Subagent writes to discord-notification-pending.json
+  ↓
+Main agent checks discord-notification-pending.json
+  ↓
+Main agent sends Discord DM via sessions_send
   ↓
 You get notified! ✅
 ```
@@ -48,25 +52,28 @@ You get notified! ✅
 |-------|------|
 | Post scheduled | e.g., 7:45 PM |
 | Post goes live | 7:45 PM (exact) |
-| Subagent wakes | 7:46 PM (1 min later) |
-| Subagent sends DM | 7:46-7:47 PM |
+| Subagent prepares notification | 7:46 PM (1 min later) |
+| Main agent sends DM | Next conversation start |
 
 ---
 
-## 📝 **Subagent Instructions:**
+## 📝 **Main Agent Responsibility:**
 
-```
-Wait until (scheduled time + 1 minute):
-1. Check campaign-schedule.json for the post
-2. Get the Instagram URL from campaign-state.json
-3. Send Discord DM to Juan with:
-   - Post headline
-   - Promotion
-   - Instagram link
-   - Posted time
-4. Confirm and exit
-```
+**At the START of EVERY conversation:**
+1. Check: `cat discord-notification-pending.json`
+2. If exists → Use `sessions_send` to send to Juan
+3. Delete file after sending
+4. Continue with conversation
 
 ---
 
-**This system ensures: ALWAYS notified, ~1 minute delay, no spam.**
+## 📁 **File Locations:**
+
+| File | Purpose |
+|------|---------|
+| `message-pending.json` | Raw notification from instagram-poster.js |
+| `discord-notification-pending.json` | Formatted for main agent to send |
+
+---
+
+**This system ensures: ALWAYS notified, main agent sends DM, no spam.**
