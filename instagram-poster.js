@@ -149,6 +149,22 @@ function writeNotification(post, postId) {
   log(`📬 Notification written to ${NOTIFICATION_PATH}`);
 }
 
+// Send Discord webhook notification (INSTANT)
+async function sendDiscordWebhook(post, postId) {
+  const webhookUrl = process.env.DISCORD_WEBHOOK_URL || 'https://discord.com/api/webhooks/1492002779021971457/YOUR_WEBHOOK_TOKEN';
+  
+  const message = {
+    content: `✅ **Post Published!**\n\n📌 **${post.headline}**\n🎯 ${post.promotion}\n🔗 https://www.instagram.com/p/${postId}\n\nPosted at ${new Date().toLocaleTimeString('en-AU', { timeZone: 'Australia/Melbourne' })}`
+  };
+  
+  try {
+    await apiPost(webhookUrl, JSON.stringify(message));
+    log(`💬 Discord notification sent!`);
+  } catch (error) {
+    log(`⚠️ Discord webhook failed: ${error.message}`);
+  }
+}
+
 // Main function
 async function main() {
   log('🚀 ThaiJuan Instagram Poster (Simple)');
@@ -203,6 +219,9 @@ async function main() {
 
         // Write notification
         writeNotification(post, postId);
+        
+        // Send Discord webhook (INSTANT notification)
+        await sendDiscordWebhook(post, postId);
 
       } catch (error) {
         log(`   ❌ ERROR: ${error.message}`);
