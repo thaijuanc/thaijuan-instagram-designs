@@ -1,7 +1,8 @@
 # ThaiJuan Instagram Workflow — SIMPLE VERSION
 
-**Version:** 2.0 (Simplified)  
+**Version:** 3.0 (Optimized)  
 **Created:** 2026-04-10  
+**Updated:** 2026-04-11  
 **Status:** LOCKED — Never skip steps
 
 ---
@@ -15,14 +16,21 @@
 5. **Be Trustworthy** — Accuracy > speed
 6. **Learn From Mistakes** — Never repeat the same error
 7. **Mobile-First Formatting** — No extra blank lines, no decorative dashes, compact scannable content
+8. **Clear System Feedback** — Before EACH step, state what you're about to do + estimated time, THEN execute
 
 **Files:** /Users/fenton/.openclaw/workspace/TRUST-RULES.md, /Users/fenton/.openclaw/workspace/memory/2026-04-10.md
 
-**File:** `/Users/fenton/.openclaw/workspace/TRUST-RULES.md`
-
 ---
 
-## 📋 The 8-Step Workflow
+## 📋 The 6-Step Workflow (Optimized)
+
+### 📍 BEFORE STARTING: Show Full Plan
+**When Juan says "create a post":**
+1. Show the full workflow plan (Steps 1-6 with timing)
+2. Show Step 1 draft (headline, promotion, caption, visual, scheduled time)
+3. WAIT for approval before proceeding
+
+---
 
 ### Step 1: Draft Content ⏱️ ~2 min
 **What:** Define what you want to post
@@ -31,45 +39,29 @@
 - Headline
 - Promotion/offer
 - Caption (with emojis + hashtags)
-- Visual direction for Canva
-- **Scheduled time** (when should this post?)
-
-**Example:**
-```
-Headline: FRIDAY NIGHT FEAST
-Promotion: $79 Big Platter - Feeds 2
-Caption: "FRIDAY NIGHT = FEAST MODE! 🔥..."
-Visual: "Epic Thai platter spread, bold colors..."
-Scheduled: 3:56 PM today
-```
+- **Canva MCP Prompt** (optimized text prompt for best design generation)
+- Scheduled time
 
 **🛑 WAIT FOR APPROVAL**
-- Show draft to Juan
-- **DO NOT proceed until Juan approves the content draft**
+- Show full draft including Canva prompt to Juan
+- **DO NOT proceed until Juan approves**
 
 ---
 
-### Step 2: Generate Canva Design ⏱️ ~1 min
+### Step 2+3: Generate, Export & Upload to GitHub ⏱️ ~1 min
 **After Step 1 approval:**
-**Command:**
-```bash
-mcporter call canva-mcp.generate-design --timeout 120000 --args '{"query": "[visual direction]","design_type": "instagram_post","user_intent": "[description]"}'
-```
 
-**Output:**
-- 4 design candidates with thumbnails
-- **Show ALL 4 options to Juan with Canva URLs + thumbnail images**
-- Juan picks one (1-4)
-- Convert selected candidate: `create-design-from-candidate`
-- Get `design_id` and `job_id`
+**FEEDBACK FIRST:** Say "Generating design in Canva (~1 min)..." THEN execute
 
----
+**IMPORTANT:** Run from workspace root (`/Users/fenton/.openclaw/workspace`)
 
-### Step 3: Export & Upload to GitHub ⏱️ ~2 min
 **Commands:**
 ```bash
-# Convert to editable
-mcporter call canva-mcp.create-design-from-candidate --args '{"job_id": "...","candidate_id": "...","user_intent": "Convert to editable"}'
+# Generate 1 design
+cd /Users/fenton/.openclaw/workspace && mcporter call canva-mcp.generate-design --timeout 120000 --args '{"query": "[visual direction]","design_type": "instagram_post","user_intent": "[description]"}'
+
+# Convert to editable (use first candidate)
+mcporter call canva-mcp.create-design-from-candidate --args '{"job_id": "...","candidate_id": "[first candidate]","user_intent": "Convert to editable"}'
 
 # Export as PNG
 mcporter call canva-mcp.export-design --args '{"design_id": "...","format": {"type": "png"},"user_intent": "Export for Instagram"}'
@@ -84,38 +76,40 @@ git push
 ```
 
 **Output:**
-- PNG file saved locally
+- 1 PNG file saved locally
 - Committed to GitHub
-- Stable URL: `https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/[filename].png`
+- Stable GitHub URL ready for preview
+
+**Note:** Canva tokens auto-refresh every 2 hours via cron. If auth fails, run `mcporter auth canva-mcp` once.
 
 ---
 
 ### Step 4: ⏸️ HARD CHECKPOINT — Show Preview & WAIT ⏱️ ∞
-**What:** Show Juan the complete preview and **WAIT FOR PUBLISHING APPROVAL**
+**FEEDBACK FIRST:** Say "Design ready! Showing preview for approval..." THEN show
+
+**What:** Show Juan the design PNG (attached in Discord) and content, **WAIT FOR APPROVAL**
 
 **Output to Juan:**
-```markdown
-## Step 4: Preview for Approval
+- **Attach PNG image** so it renders in Discord
+- Show content summary
+- Include GitHub URL and Canva edit URL as reference
 
-### 🎨 Design Preview
-**Canva Edit URL:** [url]
-**GitHub Image URL:** [url]
+**Format:**
+```
+## Step 4: Preview for Approval
 
 ### 📝 Content
 **Headline:** [headline]
 **Promotion:** [promotion]
 **Caption:** [full caption]
+**Scheduled Time:** [time]
 
-### ⏰ Scheduled Time
-**Post at:** [time]
-
----
+### 🎨 Design
+**GitHub:** [url]
+**Canva Edit:** [url]
 
 ### ⏳ WAITING FOR YOUR APPROVAL
-
-**To approve:** Say "yes" or "approve"
-**To request changes:** Tell me what to adjust
-
+**Reply:** "yes" or "approve" to proceed
 **I will NOT proceed without your approval.**
 ```
 
@@ -123,24 +117,9 @@ git push
 
 ---
 
-### Step 5: Create Google Calendar Event ⏱️ ~30 sec
-**Command:**
-```bash
-gog calendar create primary \
-  --summary="📱 Instagram: [HEADLINE] - ThaiJuan" \
-  --from="[date]T[time]+10:00" \
-  --to="[date]T23:59:00+10:00" \
-  --description="[caption]\n\nCanva Edit: [url]" \
-  --attachment="[github_url]"
-```
+### Step 5: Add to Scheduler ⏱️ ~1 min
+**FEEDBACK FIRST:** Say "Adding to scheduler and committing to GitHub (~1 min)..." THEN execute
 
-**Output:**
-- Calendar event created
-- Event ID and link
-
----
-
-### Step 5b: Add to Scheduler ⏱️ ~1 min
 **What:** Add post to `campaign-schedule.json`
 
 **JSON Structure:**
@@ -167,66 +146,21 @@ git push
 
 ---
 
-### Step 6: Auto-Post at Scheduled Time ⏱️ Automatic
-**What:** Cron runs `instagram-poster.js` every minute
+### Step 6-8: Automatic (Cron Jobs)
 
-**Cron Schedule:**
-```bash
-* * * * * node instagram-poster.js
-```
+**Step 6: Auto-Post at Scheduled Time**
+- Cron runs `instagram-poster.js` every minute
+- Scans schedule for posts where: date=today, time=now, posted=false
+- Posts to Instagram automatically
 
-**What Happens:**
-- Script scans ALL posts in schedule
-- Finds posts where: `date === today` AND `scheduledTime === currentTime` AND `posted === false`
-- Posts to Instagram
-- Updates schedule + state files
-- Writes notification file
+**Step 7: Automatic Notification**
+- After posting, script writes to `message-pending.json`
+- Cron runs `notify-juan.js` every minute
+- Sends Discord webhook → Juan gets DM with post link
 
----
-
-### Step 7: Automatic Notification ⏱️ Within 2 min
-**What:** Heartbeat checker finds notification and alerts Juan
-
-**Heartbeat Schedule:**
-```bash
-*/2 * * * * node heartbeat-check.js
-```
-
-**Notification Format:**
-```
-✅ Post published: [headline]
-📌 Post ID: [postId]
-🎯 Promotion: [promotion]
-🔗 https://www.instagram.com/p/[postId]
-```
-
----
-
-### Step 8: Update State ⏱️ Automatic
-**What:** Script updates `campaign-state.json`
-
-**Fields Updated:**
-- `lastPostDate`
-- `lastPostId`
-- `updatedAt`
-
----
-
-## 🛑 HARD CHECKPOINTS
-
-### Checkpoint 1: After Step 3
-**Before proceeding to Step 5:**
-- ✅ Design generated?
-- ✅ Exported as PNG?
-- ✅ Uploaded to GitHub?
-- ⏸️ **SHOW JUAN AND WAIT FOR "YES"**
-
-### Checkpoint 2: After Step 5b
-**Before reporting "done":**
-- ✅ Calendar event created?
-- ✅ Added to scheduler?
-- ✅ Committed to GitHub?
-- ✅ Confirmed cron is running?
+**Step 8: Update State**
+- Script updates `campaign-state.json`
+- Records: lastPostDate, lastPostId, updatedAt
 
 ---
 
@@ -234,41 +168,28 @@ git push
 
 ```
 /Users/fenton/.openclaw/workspace/
-├── TRUST-RULES.md              # Core operating principles
-├── LESSONS-LEARNED.md          # Mistakes + lessons
+├── TRUST-RULES.md
+├── MEMORY.md
 │
 └── thai-restaurant/content-engine/
-    ├── instagram-poster.js     # Main posting script (SIMPLE)
-    ├── heartbeat-check.js      # Notification checker
-    │
-    ├── campaign-schedule.json  # All scheduled posts
-    ├── campaign-state.json     # Posting progress
-    │
-    ├── SIMPLE-WORKFLOW.md      # This file
-    ├── TRUST-RULES.md          # Local copy
-    │
-    └── [design files].png      # All design images
+    ├── instagram-poster.js
+    ├── heartbeat-check.js
+    ├── notify-juan.js
+    ├── campaign-schedule.json
+    ├── campaign-state.json
+    ├── SIMPLE-WORKFLOW.md
+    └── [design files].png
 ```
 
 ---
 
 ## 🔧 Cron Configuration
 
-**View:**
 ```bash
-crontab -l
-```
-
-**Expected:**
-```bash
-# Post every minute
 * * * * * node instagram-poster.js
-
-# Check notifications every 2 minutes
-*/2 * * * * node heartbeat-check.js
-
-# Refresh tokens every 3 hours
-0 */3 * * * node auto-refresh-token.js
+* * * * * node heartbeat-check.js
+* * * * * node notify-juan.js
+0 */2 * * * node auto-refresh-token.js
 ```
 
 ---
@@ -285,17 +206,6 @@ crontab -l
 - Skip the broken step
 - Continue without reporting
 - Assume it's fine
-
----
-
-## 🎯 Success Metrics
-
-| Metric | Target |
-|--------|--------|
-| Posts on time | 100% |
-| Approval step followed | 100% |
-| Notification within 2 min | 100% |
-| Zero skipped steps | 100% |
 
 ---
 
