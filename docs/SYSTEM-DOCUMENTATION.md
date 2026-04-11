@@ -23,7 +23,8 @@ content-engine/
 │
 ├── docs/                       # Documentation
 │   ├── SIMPLE-WORKFLOW.md      # Step-by-step posting workflow
-│   └── SYSTEM-DOCUMENTATION.md # This file
+│   ├── SYSTEM-DOCUMENTATION.md # This file
+│   └── MARKETING-STRATEGY.md   # Marketing optimization strategy
 │
 ├── designs/                    # Active designs (current week)
 │   └── YYYY-MM-DD_campaign_slug_HHMM.png
