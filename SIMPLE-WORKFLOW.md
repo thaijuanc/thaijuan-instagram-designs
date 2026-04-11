@@ -152,15 +152,16 @@ git push
 - Cron runs `instagram-poster.js` every minute
 - Scans schedule for posts where: date=today, time=now, posted=false
 - Posts to Instagram automatically
+- **Fetches proper Instagram permalink** (shortcode URL, not numeric ID)
 
 **Step 7: Automatic Notification**
-- After posting, script writes to `message-pending.json`
+- After posting, script writes to `message-pending.json` with correct Instagram URL
 - Cron runs `notify-juan.js` every minute
-- Sends Discord webhook → Juan gets DM with post link
+- Sends Discord webhook → Juan gets DM with **working Instagram link**
 
 **Step 8: Update State**
 - Script updates `campaign-state.json`
-- Records: lastPostDate, lastPostId, updatedAt
+- Records: lastPostDate, lastPostId, lastPostUrl, updatedAt
 
 ---
 
@@ -206,6 +207,21 @@ git push
 - Skip the broken step
 - Continue without reporting
 - Assume it's fine
+
+---
+
+## 📝 Known Issues & Fixes
+
+### Instagram URL Format (Fixed 2026-04-11)
+**Issue:** Notifications sent numeric post ID links (e.g., `instagram.com/p/18584627212016182`) which don't work.
+
+**Fix:** Script now fetches proper permalink from Instagram Graph API with shortcode (e.g., `instagram.com/p/ABC123xyz/`).
+
+**Files Updated:**
+- `instagram-poster.js` — Calls `fetchInstagramPermalink()` after posting
+- `notify-juan.js` — Uses correct URL from notification data
+
+**Result:** All notifications now include working Instagram links.
 
 ---
 
