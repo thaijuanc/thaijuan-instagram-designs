@@ -24,67 +24,71 @@
 
 ## 📋 Complete Workflow (8 Steps)
 
-### Step 1: Draft Content
-- Define headline
-- Define promotion/offer
-- Write caption
-- Write hashtags
-- Define visual direction for Canva
-- **Define scheduled time** (when should this post?)
+### Step 1: Draft Content ✍️
+**Create the content brief:**
+- Headline
+- Promotion/offer details
+- Full caption
+- Hashtags
+- Visual direction for Canva (style, colors, mood, key elements)
+- Scheduled time (when should this post?)
 
-### Step 2: Generate Canva Design
-- Define headline
-- Define promotion/offer
-- Write caption
-- Write hashtags
-- Define visual direction for Canva
+**🛑 WAIT FOR APPROVAL**
+- Show draft to user
+- **DO NOT proceed until user approves the copy and visual direction**
 
-### Step 2: Generate Canva Design
-- Use `mcporter call canva-mcp.generate-design`
-- Select best candidate from results
+### Step 2: Generate Canva Design 🎨
+**After Step 1 approval:**
+- Use `mcporter call canva-mcp.generate-design` with approved brief
+- Review generated candidates
+- Select best candidate (or ask user to pick)
 
-### Step 3: Export & Upload to GitHub
-- Convert design to editable: `canva-mcp.create-design-from-candidate`
+### Step 3: Export & Upload to GitHub 📤
+**Make design editable and export:**
+- Convert to editable design: `canva-mcp.create-design-from-candidate`
 - Export as PNG: `canva-mcp.export-design`
-- Download PNG locally
-- Upload to GitHub (stable URL for Instagram)
+- Download PNG
+- Upload to GitHub repository (stable URL for Instagram API)
 
-### Step 4: Show Preview for Approval
-- Display Canva edit URL
-- Display GitHub image URL
-- Display full caption + hashtags
-- **WAIT for explicit user approval**
-- ⛔ DO NOT PROCEED without approval
+### Step 4: Show Preview for Approval ✅
+**Present complete preview:**
+- Canva edit URL (for any last-minute tweaks)
+- GitHub image URL (preview the actual image)
+- Full caption + hashtags
+- Scheduled post time
 
-### Step 5: Create Google Calendar Event
+**🛑 WAIT FOR EXPLICIT APPROVAL**
+- ⛔ DO NOT PROCEED without user saying "yes" or "approve"
+
+### Step 5: Create Google Calendar Event 📅
+**After Step 4 approval:**
 - Use `gog calendar create`
-- Include: summary, time, caption, Canva edit link, image attachment
-- Event serves as record + visual calendar
+- Include: event title, scheduled time, full caption, Canva edit link, image attachment
+- Event serves as permanent record + visual calendar reference
 
-### Step 5b: Add to Scheduler (for future posts)
-- **If post is for future time:** Add to `campaign-schedule.json`
-- Set `scheduledTime` and `date`
-- Set `posted: false`
-- Cron will auto-post at the scheduled time
-- **If post is immediate:** Skip to Step 6
-
-### Step 6: Post to Instagram
+### Step 6: Post to Instagram 📸
+**For immediate posts:**
 - Use Instagram Graph API via `poster.js` or `test-post.js`
-- Create media container
+- Create media container with GitHub image URL
 - Wait 5 seconds for processing
 - Publish media
-- Capture post ID
+- Capture and save post ID
 
-### Step 7: Notify User (Automatic)
-- **Auto-poster writes to:** `notification-pending.json`
-- **Heartbeat checker runs:** Every 2 minutes
-- **Heartbeat reads notification** and alerts Juan
-- **Includes:** Instagram post URL, post ID, headline, promotion
-- **Confirms:** Post is live and on time
+**For scheduled posts:**
+- Add to `campaign-schedule.json` with `scheduledTime`, `date`, `posted: false`
+- Cron auto-posts at scheduled time (checks every minute)
 
-### Step 8: Update State
-- Update `campaign-state.json`
-- Log success in daily memory file
+### Step 7: Notify User 🔔
+**Automatic notification after posting:**
+- **Auto-poster writes to:** `message-pending.json`
+- **notify-juan.js runs:** Every minute (cron)
+- **Sends Discord webhook directly** → Juan gets DM within 1 minute
+- **No agent monitoring required** — fully automatic!
+
+### Step 8: Update State 📝
+**Finalize:**
+- Update `campaign-state.json` (mark as posted)
+- Log success in daily memory file (`memory/YYYY-MM-DD.md`)
 
 ---
 

@@ -1,24 +1,24 @@
 # ThaiJuan Instagram — Notification Rules
 
-**Version:** 3.0  
-**Date:** 2026-04-10  
+**Version:** 4.0 (Webhook)  
+**Date:** 2026-04-11  
 **Status:** ACTIVE
 
 ---
 
-## 🎯 **Golden Rule: Main Agent Sends DM**
+## 🎯 **Golden Rule: Fully Automatic Discord Webhook**
 
-**Every post gets a Discord DM notification from the main agent.**
+**Every post gets an automatic Discord DM notification within 1 minute.**
 
-Subagents can't send messages — only the main agent can.
+No agent monitoring required — the webhook handles everything.
 
 ---
 
 ## 📋 **Notification Method**
 
-### **Main Agent DM (1 Minute Delay)**
-- **When:** 1 minute after scheduled post time
-- **Where:** Juan's Discord DM (via sessions_send)
+### **Discord Webhook (1 Minute Delay)**
+- **When:** 1 minute after post goes live
+- **Where:** Juan's Discord server/channel via webhook
 - **Timing:** ~1 minute delay
 - **Status:** ✅ Active and working
 
@@ -27,19 +27,13 @@ Subagents can't send messages — only the main agent can.
 ## 🔀 **How It Works:**
 
 ```
-Post goes live (e.g., 7:45 PM)
+Post goes live (e.g., 1:00 PM)
   ↓
 instagram-poster.js writes to message-pending.json
   ↓
-Subagent wakes at 7:46 PM (1 minute later)
+notify-juan.js detects it (within 1 minute)
   ↓
-Subagent reads message-pending.json + campaign-state.json
-  ↓
-Subagent writes to discord-notification-pending.json
-  ↓
-Main agent checks discord-notification-pending.json
-  ↓
-Main agent sends Discord DM via sessions_send
+notify-juan.js sends Discord webhook
   ↓
 You get notified! ✅
 ```
@@ -50,20 +44,11 @@ You get notified! ✅
 
 | Event | Time |
 |-------|------|
-| Post scheduled | e.g., 7:45 PM |
-| Post goes live | 7:45 PM (exact) |
-| Subagent prepares notification | 7:46 PM (1 min later) |
-| Main agent sends DM | Next conversation start |
-
----
-
-## 📝 **Main Agent Responsibility:**
-
-**At the START of EVERY conversation:**
-1. Check: `cat discord-notification-pending.json`
-2. If exists → Use `sessions_send` to send to Juan
-3. Delete file after sending
-4. Continue with conversation
+| Post scheduled | e.g., 1:00 PM |
+| Post goes live | 1:00 PM (exact) |
+| notify-juan.js detects | 1:01 PM (within 1 min) |
+| Discord webhook sent | 1:01 PM |
+| You receive DM | 1:01 PM |
 
 ---
 
@@ -72,8 +57,47 @@ You get notified! ✅
 | File | Purpose |
 |------|---------|
 | `message-pending.json` | Raw notification from instagram-poster.js |
-| `discord-notification-pending.json` | Formatted for main agent to send |
+| `notifications-sent/` | Archive of all sent notifications |
+| `.env` | Discord webhook URL (SECRET) |
 
 ---
 
-**This system ensures: ALWAYS notified, main agent sends DM, no spam.**
+## 🔧 **Scripts:**
+
+| Script | Purpose | Cron |
+|--------|---------|------|
+| `instagram-poster.js` | Posts to Instagram, writes message-pending.json | Every minute |
+| `notify-juan.js` | Reads message-pending.json, sends Discord webhook | Every minute |
+| `heartbeat-check.js` | Legacy detector (backup) | Every minute |
+
+---
+
+## 🛡️ **Webhook Security:**
+
+- Webhook URL stored in `.env` (never committed to git)
+- Only sends after successful Instagram post
+- Archives all sent notifications
+- Logs to `/tmp/thaijuan-notify-juan.log`
+
+---
+
+## ⚠️ **If Notification Fails:**
+
+**Check logs:**
+```bash
+tail /tmp/thaijuan-notify-juan.log
+```
+
+**Test webhook:**
+```bash
+node notify-juan.js
+```
+
+**Verify webhook URL:**
+```bash
+cat .env
+```
+
+---
+
+**This system ensures: ALWAYS notified, fully automatic, no manual monitoring.**

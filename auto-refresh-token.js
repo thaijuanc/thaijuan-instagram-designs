@@ -52,9 +52,9 @@ function checkTokenExpiry(tokens) {
   const expiresInSeconds = tokens.expires_in || 0;
   const expiresInMillis = expiresInSeconds * 1000;
   
-  // We don't have the exact issued_at time, so we'll refresh proactively
-  // Refresh if expires_in is less than 30 minutes (1800 seconds)
-  const refreshThreshold = 1800; // 30 minutes
+  // Refresh proactively if expires in < 2 hours (7200 seconds)
+  // Tokens last 3.5 hours, so this gives us a safety margin
+  const refreshThreshold = 7200; // 2 hours
   
   if (expiresInSeconds < refreshThreshold) {
     log(`⚠️  Token expires in ${expiresInSeconds}s (${Math.floor(expiresInSeconds / 60)} min) - REFRESHING`);
