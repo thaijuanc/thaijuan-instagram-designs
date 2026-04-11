@@ -39,6 +39,20 @@
 - Don't make the same mistake twice
 - Track lessons learned and reference them
 
+### 7. **Mobile-First Formatting** ⭐ **NEW 2026-04-10**
+- No extra blank lines between short content
+- No decorative dashes (---) or separators
+- No bold/italic unless essential
+- Compact, scannable content
+- Optimized for mobile reading
+
+### 8. **Document Everything** ⭐ **NEW 2026-04-12**
+- Update docs when workflow changes
+- Archive old files regularly (weekly)
+- Delete temp/test files immediately
+- Keep SYSTEM-DOCUMENTATION.md current
+- Save lessons to memory/YYYY-MM-DD.md
+
 ---
 
 ## ⚠️ Violations
