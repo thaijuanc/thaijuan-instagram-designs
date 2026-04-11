@@ -131,7 +131,45 @@ function getMelbourneTime() {
   };
 }
 
-// Write notification file
+// Send Discord webhook notification
+function sendDiscordWebhook(post, postId, instagramUrl) {
+  const message = `✅ **Post Published!**\n\n📌 **${post.headline}**\n🎯 ${post.promotion}\n🔗 ${instagramUrl}\n\nPosted at ${new Date().toLocaleTimeString('en-AU', { timeZone: 'Australia/Melbourne' })}`;
+  
+  const payload = Buffer.from(JSON.stringify({
+    content: message,
+    username: 'ThaiJuan Bot'
+  }));
+  
+  const url = new URL(process.env.DISCORD_WEBHOOK_URL || 'YOUR_WEBHOOK_URL_HERE');
+  
+  const options = {
+    hostname: url.hostname,
+    port: 443,
+    path: url.pathname + '?wait=true',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(payload)
+    }
+  };
+  
+  const req = https.request(options, (res) => {
+    if (res.statusCode === 204 || res.statusCode === 200) {
+      log(`✅ Discord notification sent`);
+    } else {
+      log(`❌ Discord error: ${res.statusCode}`);
+    }
+  });
+  
+  req.on('error', (e) => {
+    log(`❌ Webhook error: ${e.message}`);
+  });
+  
+  req.write(payload);
+  req.end();
+}
+
+// Write notification file (backup)
 function writeNotification(post, postId, instagramUrl) {
   const notification = {
     type: 'post_published',
@@ -146,7 +184,7 @@ function writeNotification(post, postId, instagramUrl) {
   };
   
   saveJson(NOTIFICATION_PATH, notification);
-  log(`📬 Notification written to ${NOTIFICATION_PATH}`);
+  log(`📬 Backup notification written to ${NOTIFICATION_PATH}`);
 }
 
 // Fetch Instagram permalink (shortcode URL)
@@ -230,9 +268,11 @@ async function main() {
         state.lastPostUrl = instagramUrl;
         state.updatedAt = new Date().toISOString();
 
-        // Write notification for subagent to send
+        // Send Discord webhook IMMEDIATELY
+        sendDiscordWebhook(post, postId, instagramUrl);
+        
+        // Also write backup notification file
         writeNotification(post, postId, instagramUrl);
-        log(`   📬 Notification queued for subagent DM`);
 
       } catch (error) {
         log(`   ❌ ERROR: ${error.message}`);
