@@ -156,9 +156,9 @@ git push
 - **Sends Discord webhook immediately** (~5 seconds after posting)
 
 **Step 7: Automatic Notification**
-- **Primary:** `instagram-poster.js` sends webhook directly after posting (instant)
-- **Backup:** `notify-juan.js` detects `message-pending.json` (if primary fails)
-- Juan gets DM with **working Instagram link** within seconds
+- **Discord Channel:** `instagram-poster.js` sends webhook directly after posting (instant)
+- **Direct Chat:** FentonD detects `notification-pending.json` and messages Juan directly in this chat
+- Juan gets notified in **both places** with **working Instagram link** within seconds
 
 **Step 8: Update State**
 - Script updates `campaign-state.json`
