@@ -153,11 +153,12 @@ git push
 - Scans schedule for posts where: date=today, time=now, posted=false
 - Posts to Instagram automatically
 - **Fetches proper Instagram permalink** (shortcode URL, not numeric ID)
+- **Sends Discord webhook immediately** (~5 seconds after posting)
 
 **Step 7: Automatic Notification**
-- After posting, script writes to `message-pending.json` with correct Instagram URL
-- Cron runs `notify-juan.js` every minute
-- Sends Discord webhook → Juan gets DM with **working Instagram link**
+- **Primary:** `instagram-poster.js` sends webhook directly after posting (instant)
+- **Backup:** `notify-juan.js` detects `message-pending.json` (if primary fails)
+- Juan gets DM with **working Instagram link** within seconds
 
 **Step 8: Update State**
 - Script updates `campaign-state.json`
@@ -222,6 +223,17 @@ git push
 - `notify-juan.js` — Uses correct URL from notification data
 
 **Result:** All notifications now include working Instagram links.
+
+### Notification Delay (Fixed 2026-04-11)
+**Issue:** Notifications were delayed by 1-2 minutes due to two-step file handoff process.
+
+**Fix:** `instagram-poster.js` now sends Discord webhook immediately after posting (~5 seconds).
+
+**Files Updated:**
+- `instagram-poster.js` — Added `sendDiscordWebhook()` function, calls it right after posting
+- `notify-juan.js` — Remains as backup safety net
+
+**Result:** Notifications arrive within seconds of posting, not minutes.
 
 ---
 
