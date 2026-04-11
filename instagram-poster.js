@@ -140,33 +140,41 @@ function sendDiscordWebhook(post, postId, instagramUrl) {
     username: 'ThaiJuan Bot'
   }));
   
-  const url = new URL(process.env.DISCORD_WEBHOOK_URL || 'YOUR_WEBHOOK_URL_HERE');
+  // Send to BOTH webhooks: notifications channel + direct chat
+  const webhooks = [
+    process.env.DISCORD_WEBHOOK_URL,           // Notifications channel
+    process.env.DISCORD_WEBHOOK_URL_DIRECT     // Direct chat with Juan
+  ].filter(url => url && url !== 'YOUR_WEBHOOK_URL_HERE');
   
-  const options = {
-    hostname: url.hostname,
-    port: 443,
-    path: url.pathname + '?wait=true',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': Buffer.byteLength(payload)
-    }
-  };
-  
-  const req = https.request(options, (res) => {
-    if (res.statusCode === 204 || res.statusCode === 200) {
-      log(`✅ Discord notification sent`);
-    } else {
-      log(`❌ Discord error: ${res.statusCode}`);
-    }
+  webhooks.forEach((webhookUrl, index) => {
+    const url = new URL(webhookUrl);
+    
+    const options = {
+      hostname: url.hostname,
+      port: 443,
+      path: url.pathname + '?wait=true',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload)
+      }
+    };
+    
+    const req = https.request(options, (res) => {
+      if (res.statusCode === 204 || res.statusCode === 200) {
+        log(`✅ Discord notification sent (${index === 0 ? 'channel' : 'direct'})`);
+      } else {
+        log(`❌ Discord error (${index === 0 ? 'channel' : 'direct'}): ${res.statusCode}`);
+      }
+    });
+    
+    req.on('error', (e) => {
+      log(`❌ Webhook error (${index === 0 ? 'channel' : 'direct'}): ${e.message}`);
+    });
+    
+    req.write(payload);
+    req.end();
   });
-  
-  req.on('error', (e) => {
-    log(`❌ Webhook error: ${e.message}`);
-  });
-  
-  req.write(payload);
-  req.end();
 }
 
 // Write notification file (backup)
