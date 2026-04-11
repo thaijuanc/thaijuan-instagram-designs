@@ -132,7 +132,7 @@ function getMelbourneTime() {
 }
 
 // Write notification file
-function writeNotification(post, postId) {
+function writeNotification(post, postId, instagramUrl) {
   const notification = {
     type: 'post_published',
     timestamp: new Date().toISOString(),
@@ -140,9 +140,9 @@ function writeNotification(post, postId) {
     promotion: post.promotion,
     postId: postId,
     instagramHandle: '@thaijuanc',
-    instagramUrl: `https://www.instagram.com/p/${postId}`,
+    instagramUrl: instagramUrl,
     scheduledTime: post.scheduledTime,
-    message: `✅ Post published: ${post.headline}\n📌 Post ID: ${postId}\n🎯 Promotion: ${post.promotion}\n🔗 ${post.instagramUrl}`
+    message: `✅ Post published: ${post.headline}\n📌 Post ID: ${postId}\n🎯 Promotion: ${post.promotion}\n🔗 ${instagramUrl}`
   };
   
   saveJson(NOTIFICATION_PATH, notification);
@@ -214,17 +214,24 @@ async function main() {
         log(`   ✅ SUCCESS!`);
         log(`   🎯 Promotion: ${post.promotion}`);
 
+        // Fetch proper Instagram permalink (with shortcode)
+        log(`   🔗 Fetching Instagram permalink...`);
+        const instagramUrl = await fetchInstagramPermalink(postId, config);
+        log(`   ✅ Permalink: ${instagramUrl}`);
+
         // Update post status
         post.posted = true;
         post.postId = postId;
+        post.instagramUrl = instagramUrl;
 
         // Update state
         state.lastPostDate = melbourne.date;
         state.lastPostId = postId;
+        state.lastPostUrl = instagramUrl;
         state.updatedAt = new Date().toISOString();
 
         // Write notification for subagent to send
-        writeNotification(post, postId);
+        writeNotification(post, postId, instagramUrl);
         log(`   📬 Notification queued for subagent DM`);
 
       } catch (error) {
