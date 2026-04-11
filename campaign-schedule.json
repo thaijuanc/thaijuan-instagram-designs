@@ -109,7 +109,8 @@
       "fullCaption": "You asked for spicy. We brought the heat. 🔥 FREE drink with any Level 5+ dish. Can you handle it?\n\n📍 ThaiJuan, Surry Hills\n\n#WeekendWarrior #ThaiJuan #SpicyFood #PadKrapow #SydneyFoodie #SurryHills #ThaiStreetFood #HeatSeeker #SaturdayVibes #SydneyEats",
       "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/day2-saturday.png",
       "scheduledTime": "09:00",
-      "posted": false
+      "posted": true,
+      "postId": "18092214341523048"
     },
     {
       "day": 3,
@@ -324,6 +325,19 @@
       "fullCaption": "Sweet weekend vibes! 🍌🍦\n\nOur legendary Banana Split is BACK. Three scoops, fresh bananas, whipped cream, cherries, and all the toppings. Pure happiness in a bowl!\n\n$12 — weekend only!\n\n📍 ThaiJuan, Surry Hills\n\nTag your dessert date. You're welcome. 😉\n\n#ThaiJuan #BananaSplit #DessertLover #SydneySweets #WeekendTreat #SurryHills #ThaiDessert #SydneyFoodie #SweetTooth #WeekendVibes",
       "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/banana1.png",
       "scheduledTime": "23:50",
+      "posted": true,
+      "postId": "18387062287089411",
+      "notificationSent": true
+    },
+    {
+      "day": "2a",
+      "date": "2026-04-11",
+      "dayOfWeek": "Saturday",
+      "headline": "WEEKEND SPECIAL",
+      "promotion": "$15 Stir Fry — Saturday & Sunday Only",
+      "fullCaption": "Weekend vibes = stir fry vibes! 🍳🔥\n\nHot, fresh, bold flavours — our famous stir fry is just $15 all weekend long!\n\nPerfect for sharing. Perfect for devouring.\n\n📍 ThaiJuan, Surry Hills\n🕛 Sat & Sun, all day\n💰 $15 stir fry madness\n\nBring your crew. Feed the vibe.\n\n#WeekendSpecial #ThaiJuan #StirFry #SydneyFoodie #SurryHills #ThaiFood #SydneyEats #WeekendVibes #FoodDeal #ThaiStreetFood",
+      "githubUrl": "https://raw.githubusercontent.com/thaijuanc/thaijuan-instagram-designs/main/weekend-special-stirfry-2pm-v2.png",
+      "scheduledTime": "14:00",
       "posted": false
     }
   ]
