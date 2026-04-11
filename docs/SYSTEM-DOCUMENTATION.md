@@ -26,14 +26,39 @@ content-engine/
 │   └── SYSTEM-DOCUMENTATION.md # This file
 │
 ├── designs/                    # Active designs (current week)
-│   └── [recent .png files]
+│   └── YYYY-MM-DD_campaign_slug_HHMM.png
 │
 ├── designs/archive/            # Historical designs (older than 7 days)
-│   └── [archived .png files]
+│   └── YYYY-MM-DD_campaign_slug_HHMM.png
 │
 └── source-images/              # Original photos uploaded by user
     └── [source images]
 ```
+
+---
+
+## 🏷️ Naming Convention
+
+**Format:** `YYYY-MM-DD_campaign_slug_HHMM.png`
+
+**Examples:**
+- `2026-04-11_weekend_weekend-feast-mode_1515.png`
+- `2026-04-11_daily_today-only-10-thai-fried-rice_1545.png`
+- `2026-04-10_test_notification-test_1133.png`
+
+**Rules:**
+1. **Date first** → Sorts chronologically (YYYY-MM-DD)
+2. **Campaign type** → `weekend`, `daily`, `flash`, `happy-hour`, `test`
+3. **Headline slug** → Lowercase, hyphens, max 30 chars
+4. **Time** → 24h format, no colon (HHMM)
+5. **Extension** → `.png` always
+
+**Benefits:**
+- ✅ Chronological sorting
+- ✅ Easy identification
+- ✅ No filename conflicts
+- ✅ Archive-friendly
+- ✅ Human-readable
 
 ---
 
