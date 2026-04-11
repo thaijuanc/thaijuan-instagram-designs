@@ -75,10 +75,12 @@ content-engine/
 ### Cron Schedule
 
 ```bash
-* * * * *  # Instagram poster (posts scheduled content)
-* * * * *  # Discord notifier (sends notifications)
-* * * * *  # Heartbeat check (system monitoring)
-0 */2 * * *  # Token refresh (OAuth, every 2 hours)
+* * * * *     # Instagram poster (posts scheduled content)
+* * * * *     # Discord notifier (sends notifications)
+* * * * *     # Heartbeat check (system monitoring)
+0 */2 * * *   # Token refresh (OAuth, every 2 hours)
+0 9 * * *     # Analytics fetcher (daily report at 9 AM)
+0 9 * * MON   # Weekly analytics summary (Mondays at 9 AM)
 ```
 
 ### Posting Flow
@@ -303,12 +305,32 @@ Preview Approval → Add to Schedule → Commit → Cron Auto-Posts → Discord 
 
 ---
 
+## 📊 Analytics Tracking
+
+**Metrics Tracked:**
+- Impressions (total views)
+- Reach (unique accounts)
+- Likes, Comments, Saves, Shares
+- Engagement rate (calculated)
+
+**Storage:** `config/analytics.json`
+
+**Reports:**
+- **Daily:** 9 AM Discord summary (yesterday's posts)
+- **Weekly:** Monday 9 AM full week summary
+- **On-demand:** Ask "how did post X perform?"
+
+**Script:** `src/fetch-analytics.js`
+
+---
+
 ## 🔐 Security
 
 - `.env` file contains secrets (webhook URLs, OAuth tokens)
 - Never commit `.env` to GitHub
 - Discord webhook URLs are sensitive — treat as passwords
 - OAuth tokens auto-refresh, never hardcode
+- Analytics data stays local (not shared externally)
 
 ---
 
