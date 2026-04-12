@@ -1,358 +1,90 @@
-# ThaiJuan Instagram Automation System
+# ThaiJuan Instagram System Documentation
 
-**Version:** 3.0  
-**Last Updated:** 2026-04-12  
-**Status:** Production Ready ✅
+**Version:** 4.0
+**Last Updated:** 2026-04-13
+**Status:** Production Ready
 
 ---
 
-## 📁 File Structure
+## File Structure
 
 ```
 content-engine/
-├── src/                        # Source code
-│   ├── instagram-poster.js     # Auto-posts scheduled content
-│   ├── notify-juan.js          # Sends Discord notifications
-│   ├── auto-refresh-token.js   # Refreshes OAuth tokens
-│   └── heartbeat-check.js      # System health monitoring
-│
-├── config/                     # Configuration files
-│   ├── .env                    # Environment variables (webhook URLs, tokens)
-│   ├── campaign-schedule.json  # All scheduled posts
-│   └── campaign-state.json     # System state tracking
-│
-├── docs/                       # Documentation
-│   ├── SIMPLE-WORKFLOW.md      # Step-by-step posting workflow
-│   ├── SYSTEM-DOCUMENTATION.md # This file
-│   └── MARKETING-STRATEGY.md   # Marketing optimization strategy
-│
-├── designs/                    # Active designs (current week)
-│   └── YYYY-MM-DD_campaign_slug_HHMM.png
-│
-├── designs/archive/            # Historical designs (older than 7 days)
-│   └── YYYY-MM-DD_campaign_slug_HHMM.png
-│
-└── source-images/              # Original photos uploaded by user
-    └── [source images]
+├── src/
+│   ├── instagram-poster.js      # Posts to Instagram at scheduled time
+│   ├── heartbeat-check.js        # Detects new posts, writes message-pending.json
+│   ├── notify-juan.js           # Sends Discord webhook notifications
+│   └── fetch-analytics.js       # Fetches Instagram analytics (daily 9 AM)
+├── config/
+│   ├── .env                     # Webhook URLs, tokens (never commit)
+│   ├── config.json              # Instagram credentials + settings
+│   ├── campaign-schedule.json   # All scheduled posts
+│   └── campaign-state.json      # Last post tracking
+├── designs/                     # Current campaign designs
+├── designs/archive/             # Archived designs (after campaign)
+├── docs/                        # Documentation
+└── source-images/               # User-uploaded photos
 ```
 
 ---
 
-## 🏷️ Naming Convention
+## Cron Jobs (Active)
+
+```
+* * * * * instagram-poster.js      # Every minute: post scheduled content
+* * * * * heartbeat-check.js        # Every minute: detect posts, write notifications
+* * * * * notify-juan.js            # Every minute: send Discord webhooks
+0 9 * * * fetch-analytics.js        # Daily at 9 AM: fetch analytics
+```
+
+**Note:** Canva MCP auth is manual — run `mcporter auth canva-mcp` when needed.
+
+---
+
+## Image Naming Convention
 
 **Format:** `YYYY-MM-DD_campaign_slug_HHMM.png`
 
 **Examples:**
-- `2026-04-11_weekend_weekend-feast-mode_1515.png`
-- `2026-04-11_daily_today-only-10-thai-fried-rice_1545.png`
-- `2026-04-10_test_notification-test_1133.png`
+- `2026-04-13_monday_buy1get2_0016.png` (current)
+- `2026-04-11_weekend_weekend-feast-mode_1515.png` (archive)
 
-**Rules:**
-1. **Date first** → Sorts chronologically (YYYY-MM-DD)
-2. **Campaign type** → `weekend`, `daily`, `flash`, `happy-hour`, `test`
-3. **Headline slug** → Lowercase, hyphens, max 30 chars
-4. **Time** → 24h format, no colon (HHMM)
-5. **Extension** → `.png` always
-
-**Benefits:**
-- ✅ Chronological sorting
-- ✅ Easy identification
-- ✅ No filename conflicts
-- ✅ Archive-friendly
-- ✅ Human-readable
+**Folders:**
+- `designs/` — active campaign images
+- `designs/archive/` — completed/archived images
 
 ---
 
-## 🚀 How It Works
+## Known Issues & Fixes
 
-### Overview
+### Instagram URL Format
+Notifications used to send numeric IDs (`instagram.com/p/18584627212016182`) — broken links.
 
-1. **Create Post** → Follow workflow in `SIMPLE-WORKFLOW.md`
-2. **Schedule** → Added to `campaign-schedule.json`
-3. **Auto-Post** → Cron runs every minute, posts at scheduled time
-4. **Notify** → Discord webhook sent within 5 seconds
-5. **Track** → State updated in `campaign-state.json`
+**Fix:** Script now fetches proper shortcode URL from Instagram Graph API (`instagram.com/p/ABC123xyz/`).
 
-### Cron Schedule
+### Notification Delay
+Notifications used to take 1-2 minutes due to multi-step file handoff.
 
-```bash
-* * * * *     # Instagram poster (posts scheduled content)
-* * * * *     # Discord notifier (sends notifications)
-* * * * *     # Heartbeat check (system monitoring)
-0 */2 * * *   # Token refresh (OAuth, every 2 hours)
-0 9 * * *     # Analytics fetcher (daily report at 9 AM)
-0 9 * * MON   # Weekly analytics summary (Mondays at 9 AM)
-```
+**Fix:** `instagram-poster.js` now sends Discord webhook directly after posting (~5 seconds). `notify-juan.js` remains as backup.
 
-### Posting Flow
+### Image 404 After Reorganization
+Old designs were moved from root `/` to `designs/` and `designs/archive/` subfolders. Root-path URLs broke.
 
-```
-User Request → Content Draft → Canva Design → Export PNG → GitHub Upload
-     ↓
-Preview Approval → Add to Schedule → Commit → Cron Auto-Posts → Discord Notification
-```
+**Fix:** Updated all URLs in `campaign-schedule.json` to use `designs/archive/` path. Always use the subfolder path format.
 
 ---
 
-## 🎨 Canva MCP: Learnings & Issues
+## Canva MCP Notes
 
-### What Works Well
-
-✅ **Text-to-design generation** — Creates designs from detailed prompts  
-✅ **Multiple candidates** — Returns 4 design options to choose from  
-✅ **Editable designs** — Can convert candidates to editable Canva designs  
-✅ **PNG export** — Exports designs as PNG via API  
-✅ **OAuth auto-refresh** — Tokens refresh every 2 hours via cron  
+- **Auth:** Manual — `mcporter auth canva-mcp`
+- **Generate:** `mcporter call canva-mcp.generate-design` — returns 4 candidates
+- **Export:** `mcporter call canva-mcp.export-design` — PNG download
+- **Thumbnail previews:** Canva thumbnail URLs are blocked (403) — attach exported PNG directly to Discord
 
 ---
 
-### Issues Encountered & Workarounds
+## Security
 
-#### 1. ❌ No Image Previews in Chat
-**Issue:** Canva thumbnail URLs are blocked (403 Forbidden), can't show previews in Discord.
-
-**Workaround:**
-- Show full Canva URLs for user to click and preview
-- After export, attach PNG directly to Discord for approval
-
-**Status:** ⚠️ Workaround in place
-
----
-
-#### 2. ❌ Can't Upload Custom Images to Canva via MCP
-**Issue:** Canva MCP `generate-design` only accepts text prompts, not image attachments. User photos can't be included in design generation.
-
-**Workaround:**
-1. Save user's photo to `source-images/` folder
-2. Upload to GitHub for stable URL
-3. User manually swaps image in Canva editor after design generated
-4. Re-export and update GitHub
-
-**Status:** ⚠️ Manual step required
-
----
-
-#### 3. ❌ No Direct "Use This Image" Parameter
-**Issue:** No API parameter to specify "use this image URL in design". MCP generates from text only.
-
-**Workaround:**
-- Include image description in text prompt
-- Generate design with stock imagery
-- User manually replaces with their photo in Canva editor
-
-**Status:** ⚠️ Manual step required
-
----
-
-#### 4. ❌ OAuth Tokens Expire (3.5 hours)
-**Issue:** Canva API tokens expire after ~3.5 hours, causing auth failures.
-
-**Workaround:**
-- Cron job runs every 2 hours: `0 */2 * * * node auto-refresh-token.js`
-- Refreshes tokens before expiry
-- If auth fails: run `mcporter auth canva-mcp` manually
-
-**Status:** ✅ Automated
-
----
-
-#### 5. ❌ Design Generation is Slow (~1 min)
-**Issue:** Canva MCP takes 60+ seconds to generate 4 designs.
-
-**Optimization:**
-- Generate only 1 design (first candidate) instead of 4
-- Saves ~45 seconds per post
-- Less choice, but faster workflow
-
-**Status:** ✅ Optimized
-
----
-
-#### 6. ❌ Instagram URLs Broken (Numeric IDs)
-**Issue:** Notifications sent links like `instagram.com/p/18584627212016182` (numeric ID) which don't work.
-
-**Root Cause:** Instagram uses alphanumeric shortcodes in URLs, not numeric post IDs.
-
-**Fix:**
-- Call `fetchInstagramPermalink()` after posting
-- Gets proper shortcode URL from Instagram Graph API
-- Returns working links like `instagram.com/p/ABC123xyz/`
-
-**Status:** ✅ Fixed
-
----
-
-#### 7. ❌ Notification Delays (1-2 minutes)
-**Issue:** Two-step file handoff caused delays: poster writes file → notifier detects file (up to 1 min later).
-
-**Fix:**
-- `instagram-poster.js` sends Discord webhook directly after posting
-- notify-juan.js remains as backup safety net
-- Notifications arrive in ~5 seconds, not minutes
-
-**Status:** ✅ Fixed
-
----
-
-#### 8. ❌ No Mobile-First Formatting
-**Issue:** Early posts had decorative dashes, extra blank lines, hard to read on mobile.
-
-**Fix:**
-- Added "Mobile-First Formatting" to Trust Rules
-- No decorative dashes (───)
-- No extra blank lines
-- Compact, scannable content only
-
-**Status:** ✅ Fixed
-
----
-
-## 📋 Recommendations for Canva MCP
-
-### High Priority
-
-1. **Add Image Upload Support**
-   ```
-   Parameter: "image_url": "https://..."
-   Use Case: Include user's product photos in generated designs
-   ```
-
-2. **Add Thumbnail Preview Support**
-   ```
-   Return: Accessible thumbnail URLs or base64 thumbnails
-   Use Case: Show design previews in chat without requiring clicks
-   ```
-
-3. **Add Text Overlay Parameter**
-   ```
-   Parameter: "text_overlay": { "text": "$15 SPECIAL", "position": "center" }
-   Use Case: Generate designs with text already applied, no manual editing
-   ```
-
-4. **Faster Generation Mode**
-   ```
-   Parameter: "fast_mode": true
-   Use Case: Generate 1 design in <30 seconds instead of 4 designs in 60 seconds
-   ```
-
----
-
-### Medium Priority
-
-5. **Batch Export**
-   ```
-   Endpoint: export-designs (plural)
-   Use Case: Export multiple designs in single API call
-   ```
-
-6. **Direct Instagram Upload**
-   ```
-   Endpoint: publish-to-instagram
-   Use Case: Skip manual export/download/upload workflow
-   ```
-
-7. **Design Template Support**
-   ```
-   Parameter: "template_id": "..."
-   Use Case: Reuse brand templates with variable content
-   ```
-
----
-
-### Low Priority
-
-8. **Webhook Notifications**
-   ```
-   Parameter: "webhook_url": "https://..."
-   Use Case: Notify when design generation complete (instead of polling)
-   ```
-
-9. **Design Versioning**
-   ```
-   Feature: Track design revisions
-   Use Case: Revert to previous versions, compare changes
-   ```
-
----
-
-## 🛠️ Maintenance
-
-### Daily Checks
-- [ ] Cron jobs running: `crontab -l`
-- [ ] No pending notifications: `ls message-pending.json`
-- [ ] Disk space: `df -h`
-
-### Weekly Tasks
-- [ ] Archive old designs (>7 days) to `designs/archive/`
-- [ ] Review `campaign-schedule.json` for completed posts
-- [ ] Check logs: `/tmp/thaijuan-instagram.log`
-
-### Monthly Tasks
-- [ ] Update documentation with new learnings
-- [ ] Review and optimize workflow
-- [ ] Backup config files
-
----
-
-## 📊 Performance Metrics
-
-| Metric | Target | Actual |
-|--------|--------|--------|
-| Post on time | 100% | 100% |
-| Notification delay | <10 sec | ~5 sec |
-| Design generation | <60 sec | ~45 sec |
-| Instagram URL format | Working | ✅ Shortcode |
-| OAuth failures | 0 | 0 (auto-refresh works) |
-
----
-
-## 📊 Analytics Tracking
-
-**Metrics Tracked:**
-- Impressions (total views)
-- Reach (unique accounts)
-- Likes, Comments, Saves, Shares
-- Engagement rate (calculated)
-
-**Storage:** `config/analytics.json`
-
-**Reports:**
-- **Daily:** 9 AM Discord summary (yesterday's posts)
-- **Weekly:** Monday 9 AM full week summary
-- **On-demand:** Ask "how did post X perform?"
-
-**Script:** `src/fetch-analytics.js`
-
----
-
-## 🔐 Security
-
-- `.env` file contains secrets (webhook URLs, OAuth tokens)
-- Never commit `.env` to GitHub
+- `.env` contains secrets (webhook URLs, OAuth tokens) — never commit
 - Discord webhook URLs are sensitive — treat as passwords
-- OAuth tokens auto-refresh, never hardcode
-- Analytics data stays local (not shared externally)
-
----
-
-## 📞 Troubleshooting
-
-### Post Didn't Go Live
-1. Check cron: `crontab -l`
-2. Check schedule: `cat config/campaign-schedule.json`
-3. Check logs: `tail /tmp/thaijuan-instagram.log`
-
-### Notification Not Sent
-1. Check webhook URL in `.env`
-2. Check `message-pending.json` exists
-3. Check logs: `tail /tmp/thaijuan-notify-juan.log`
-
-### Canva Auth Failed
-```bash
-cd /Users/fenton/.openclaw/workspace
-mcporter auth canva-mcp
-```
-
----
-
-**This is a living document. Update it every time the workflow changes.**
+- Instagram access tokens refresh manually or via `auto-refresh-token.js` (manual trigger)
