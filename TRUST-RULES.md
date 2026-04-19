@@ -53,6 +53,13 @@
 - Keep SYSTEM-DOCUMENTATION.md current
 - Save lessons to memory/YYYY-MM-DD.md
 
+### 9. **Check Path Dependencies** ⭐ **NEW 2026-04-12**
+- After ANY file reorganization, verify ALL script paths
+- Check cron job paths (often hardcoded and overlooked)
+- Test each component manually after path changes
+- Document file location changes in SYSTEM-DOCUMENTATION.md
+- Verify the full workflow works end-to-end
+
 ---
 
 ## ⚠️ Violations
@@ -72,7 +79,16 @@
 | Skipped Step 4 (approval) | Got caught up in execution momentum, prioritized speed over discipline | Added TRUST-RULES.md, added workflow header, saved to MEMORY.md, committed to learning |
 | Didn't show design preview | Assumed workflow was "flowing" — didn't pause for checkpoint | Will now force explicit pause after Step 3, wait for "yes" before Step 5 |
 
+**Example: Critical Path Failure (2026-04-12)**
+
+| What Happened | Why | Fix |
+|---------------|-----|-----|
+| Instagram posts stopped publishing after file reorganization | Scripts looking for files in old locations, cron jobs had wrong paths | Updated ALL script paths, fixed cron configuration, tested full workflow |
+| User reported "no notification" | Notification chain broken at multiple points | Diagnosed root causes, fixed .env path, verified cron jobs working |
+
 **Lesson:** Speed without discipline = broken trust. Always pause at checkpoints. Always wait for approval.
+
+**Additional Lesson (2026-04-12):** File path dependencies are fragile. After ANY structural change: (1) Update all script paths, (2) Check cron jobs, (3) Test each component, (4) Verify full workflow. A system can appear to work (scripts run manually) but fail in production (cron jobs broken).
 
 ---
 

@@ -1,0 +1,24 @@
+# OpenClaw / System Files
+.openclaw/
+node_modules/
+.env
+*.log
+.DS_Store
+
+# Credentials / Config
+config/
+openrouter/
+thaijuan/content-engine/config/
+venv/
+
+# AI / Memory Data
+memory/
+DREAMS.md
+DIGEST_DASHBOARD.md
+R&D_DASHBOARD.md
+AUTONOMOUS_TASKS.md
+*.json
+!thaijuan/content-engine/config/campaign-schedule.json
+
+# Thumbnails / Source Images
+thaijuan/content-engine/source-images/
