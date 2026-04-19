@@ -22,3 +22,20 @@ AUTONOMOUS_TASKS.md
 
 # Thumbnails / Source Images
 thaijuan/content-engine/source-images/
+
+# Archived Designs (History only, not needed for active automation)
+thaijuan/content-engine/designs/archive/
+
+# Personal Workspace Docs (Local only)
+AGENTS.md
+SOUL.md
+USER.md
+IDENTITY.md
+TOOLS.md
+HEARTBEAT.md
+MEMORY.md
+TRUST-RULES.md
+dream-diary-*.md
+
+# AI Digest (Separate system)
+ai-digest/
