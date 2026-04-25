@@ -1,0 +1,18 @@
+{
+  "weights": {
+    "foodAppeal": 15,
+    "visualPotential": 15,
+    "locationRelevance": 10,
+    "novelty": 10,
+    "ratingStrength": 10,
+    "reviewVolume": 10,
+    "recentBuzz": 15,
+    "priceAccessibility": 5,
+    "saveSharePotential": 10
+  },
+  "rules": {
+    "minimumRating": 4.2,
+    "minimumReviewCount": 50,
+    "avoidDuplicateWithinDays": 60
+  }
+}

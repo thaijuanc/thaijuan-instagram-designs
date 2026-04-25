@@ -1,0 +1,30 @@
+{
+  "name": "melbourne-food-social-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Social growth automation for Melbourne restaurant Instagram recommendations.",
+  "type": "commonjs",
+  "scripts": {
+    "post:check": "node thaijuan/content-engine/src/instagram-poster.js",
+    "approve:draft": "node thaijuan/content-engine/src/agents/approval-agent.js",
+    "schedule:approved": "node thaijuan/content-engine/src/agents/publisher-agent.js",
+    "agent:daily": "node thaijuan/content-engine/src/daily-runner.js",
+    "agent:daily:with-canva": "node thaijuan/content-engine/src/daily-runner.js --with-canva",
+    "agent:discover": "node thaijuan/content-engine/src/agents/research-agent.js",
+    "agent:enrich": "node thaijuan/content-engine/src/agents/enrichment-agent.js",
+    "design-md:generate": "node thaijuan/content-engine/src/agents/design-md-agent.js",
+    "canva:prompt": "node thaijuan/content-engine/src/agents/canva-prompt-agent.js",
+    "canva:auth-check": "node thaijuan/content-engine/src/agents/canva-auth-preflight.js",
+    "canva:execute": "node thaijuan/content-engine/src/agents/canva-execute-agent.js",
+    "canva:execute:dry-run": "node thaijuan/content-engine/src/agents/canva-execute-agent.js --dry-run",
+    "canva:execute:once": "node thaijuan/content-engine/src/agents/canva-execute-agent.js --max-attempts=1",
+    "canva:quality": "node thaijuan/content-engine/src/agents/canva-quality-agent.js",
+    "visual:quality": "node thaijuan/content-engine/src/agents/visual-quality-agent.js",
+    "canva:edit-handoff": "node thaijuan/content-engine/src/agents/canva-edit-handoff-agent.js",
+    "analytics:collect": "node thaijuan/content-engine/src/agents/analytics-agent.js",
+    "strategy:weekly": "node thaijuan/content-engine/src/agents/strategy-agent.js"
+  },
+  "engines": {
+    "node": ">=22.16.0"
+  }
+}

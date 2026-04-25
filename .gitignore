@@ -9,6 +9,9 @@ node_modules/
 config/
 openrouter/
 thaijuan/content-engine/config/
+!thaijuan/content-engine/config/
+thaijuan/content-engine/config/*
+!thaijuan/content-engine/config/*.example.json
 venv/
 
 # AI / Memory Data
@@ -18,6 +21,11 @@ DIGEST_DASHBOARD.md
 R&D_DASHBOARD.md
 AUTONOMOUS_TASKS.md
 *.json
+!package.json
+!*.example.json
+!.cursor/mcp.json
+!.vscode/mcp.json
+!thaijuan/content-engine/config/*.example.json
 !thaijuan/content-engine/config/campaign-schedule.json
 
 # Thumbnails / Source Images

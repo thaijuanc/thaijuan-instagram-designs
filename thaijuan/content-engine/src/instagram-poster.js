@@ -17,6 +17,9 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { loadDotEnv } = require('./lib/env');
+
+loadDotEnv();
 
 // File paths
 const CONFIG_PATH = path.join(__dirname, '../config/config.json');
@@ -24,14 +27,43 @@ const SCHEDULE_PATH = path.join(__dirname, '../config/campaign-schedule.json');
 const STATE_PATH = path.join(__dirname, '../config/campaign-state.json');
 const LOG_PATH = '/tmp/thaijuan-instagram.log';
 
+function parseArgs(argv = process.argv.slice(2)) {
+  return {
+    dryRun: argv.includes('--dry-run') || process.env.INSTAGRAM_DRY_RUN === 'true'
+  };
+}
+
 // Load JSON file
 function loadJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
+function loadJsonIfExists(filePath, fallback) {
+  if (!fs.existsSync(filePath)) return fallback;
+  return loadJson(filePath);
+}
+
 // Save JSON file
 function saveJson(filePath, data) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2) + '\n');
+}
+
+function loadInstagramConfig() {
+  const fileConfig = loadJsonIfExists(CONFIG_PATH, {});
+  const instagram = fileConfig.instagram || {};
+  return {
+    ...fileConfig,
+    instagram: {
+      instagramBusinessId: instagram.instagramBusinessId || process.env.INSTAGRAM_BUSINESS_ID,
+      accessToken: instagram.accessToken || process.env.INSTAGRAM_ACCESS_TOKEN
+    }
+  };
+}
+
+function assertInstagramConfig(config) {
+  if (!config.instagram?.instagramBusinessId) throw new Error('Missing Instagram business ID. Set INSTAGRAM_BUSINESS_ID or config/config.json.');
+  if (!config.instagram?.accessToken) throw new Error('Missing Instagram access token. Set INSTAGRAM_ACCESS_TOKEN or config/config.json.');
 }
 
 // Log with timestamp
@@ -118,15 +150,24 @@ async function postToInstagram(imageUrl, caption, config) {
 
 // Get current Melbourne time
 function getMelbourneTime() {
-  const now = new Date();
-  const melbourneOffset = 10 * 60 * 60 * 1000; // UTC+10
-  const melbourneTime = new Date(now.getTime() + melbourneOffset);
-  
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Australia/Melbourne',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+  const parts = Object.fromEntries(formatter.formatToParts(new Date()).map((part) => [part.type, part.value]));
+  const hours = Number(parts.hour);
+  const minutes = Number(parts.minute);
+
   return {
-    date: melbourneTime.toISOString().split('T')[0],
-    hours: melbourneTime.getUTCHours(),
-    minutes: melbourneTime.getUTCMinutes(),
-    timeString: `${melbourneTime.getUTCHours().toString().padStart(2, '0')}:${melbourneTime.getUTCMinutes().toString().padStart(2, '0')}`
+    date: `${parts.year}-${parts.month}-${parts.day}`,
+    hours,
+    minutes,
+    timeString: `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
   };
 }
 
@@ -217,13 +258,13 @@ async function fetchInstagramPermalink(postId, config) {
 
 // Main function
 async function main() {
+  const args = parseArgs();
   log('🚀 ThaiJuan Instagram Poster (Simple)');
 
   try {
-    // Load config and schedule
-    const config = loadJson(CONFIG_PATH);
-    const schedule = loadJson(SCHEDULE_PATH);
-    let state = loadJson(STATE_PATH);
+    // Load schedule first so checks can run without Instagram credentials when nothing is due.
+    const schedule = loadJsonIfExists(SCHEDULE_PATH, { posts: [] });
+    let state = loadJsonIfExists(STATE_PATH, {});
 
     // Get current time
     const melbourne = getMelbourneTime();
@@ -233,6 +274,9 @@ async function main() {
     const postsDue = schedule.posts.filter(post => {
       // Skip if already posted
       if (post.posted) return false;
+
+      // Skip paused/draft posts
+      if (post.status && post.status !== 'scheduled') return false;
       
       // Skip if not today
       if (post.date !== melbourne.date) return false;
@@ -247,12 +291,19 @@ async function main() {
     }
 
     log(`📤 Found ${postsDue.length} post(s) due:`);
+    const config = args.dryRun ? null : loadInstagramConfig();
+    if (!args.dryRun) assertInstagramConfig(config);
 
     // Post ALL due posts
     for (const post of postsDue) {
       log(`\n📌 Posting: ${post.headline} (${post.scheduledTime})...`);
 
       try {
+        if (args.dryRun) {
+          log(`   🧪 Dry run: would post ${post.githubUrl}`);
+          continue;
+        }
+
         const postId = await postToInstagram(post.githubUrl, post.fullCaption, config);
 
         log(`   ✅ SUCCESS!`);

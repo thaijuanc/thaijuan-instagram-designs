@@ -1,0 +1,32 @@
+{
+  "templates": [
+    {
+      "id": "daily_pick",
+      "name": "Daily Pick",
+      "canvaBrandTemplateId": "REPLACE_WITH_CANVA_BRAND_TEMPLATE_ID",
+      "fields": [
+        "RESTAURANT_NAME",
+        "SUBURB",
+        "CUISINE",
+        "HOOK",
+        "WHY_GO",
+        "BEST_FOR",
+        "CTA",
+        "IMAGE"
+      ]
+    },
+    {
+      "id": "hidden_gem",
+      "name": "Hidden Gem",
+      "canvaBrandTemplateId": "REPLACE_WITH_CANVA_BRAND_TEMPLATE_ID",
+      "fields": [
+        "RESTAURANT_NAME",
+        "SUBURB",
+        "HOOK",
+        "WHY_GO",
+        "CTA",
+        "IMAGE"
+      ]
+    }
+  ]
+}
