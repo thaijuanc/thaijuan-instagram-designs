@@ -19,7 +19,7 @@ const DRAFTS_PATH = path.join(DATA_DIR, 'content-drafts.json');
 const BANNED_PATTERNS = [
   /\bbest\b/i,
   /\bmust[-\s]?visit\b/i,
-  /\b#?1\b/i,
+  /#\s?1\b/i,
   /\bnumber one\b/i,
   /\baward[-\s]?winning\b/i,
   /\bhidden gem\b/i,
@@ -30,7 +30,19 @@ const BANNED_PATTERNS = [
   /@reallygreatsite/i,
   /lorem ipsum/i,
   /your text here/i,
-  /placeholder/i
+  /placeholder/i,
+  /\bHook\s*:/i,
+  /\bAddress\s*:/i,
+  /\bVerdict\s*:/i,
+  /culinary journey/i,
+  /unforgettable/i,
+  /indulge/i,
+  /elevate/i,
+  /discover amazing/i,
+  /worthitmelbourne\.com/i,
+  /https?:\/\//i,
+  /www\./i,
+  /\b[a-z0-9-]+\.(com|net|org|co|com\.au)\b/i
 ];
 
 function normalise(text) {
@@ -90,12 +102,34 @@ function requiredCopyChecks(draft) {
   // Exact long subtitles are often reformatted by Canva, so require the core hook terms instead.
   const source = `${design.subtitle || draft.description || ''} ${(design.bullets || []).join(' ')}`;
   const keywordGroups = [];
-  if (/yum cha/i.test(source)) keywordGroups.push({ id: 'yum_cha_hook', any: ['yum cha'] });
-  if (/cocktail/i.test(source)) keywordGroups.push({ id: 'cocktail_hook', any: ['cocktail', 'cocktails'] });
+  if (/yum cha/i.test(source)) keywordGroups.push({ id: 'hook_value', any: ['yum cha'] });
+  if (/cocktail/i.test(source)) keywordGroups.push({ id: 'hook_value', any: ['cocktail', 'cocktails', 'dinner plans', 'polished cbd'] });
   if (/bao/i.test(source)) keywordGroups.push({ id: 'bao_hook', any: ['bao'] });
   if (/dumpling/i.test(source)) keywordGroups.push({ id: 'dumpling_hook', any: ['dumpling', 'dumplings'] });
   if (/book ahead/i.test(source)) keywordGroups.push({ id: 'book_ahead_hook', any: ['book ahead', 'book'] });
   if (/save/i.test(design.cta || draft.cta || '')) keywordGroups.push({ id: 'save_cta', any: ['save'] });
+
+  const value = draft.contentPackage?.valueDetails || {};
+  if (value.tastiestDish || draft.tastiestDish) keywordGroups.push({ id: 'dish_value', any: ['tastiest', 'order', 'dish', 'what id order'] });
+  if (value.price || draft.price) keywordGroups.push({ id: 'price_value', any: ['price', 'damage', '$', 'pp'] });
+  if (value.myScore || draft.myScore) keywordGroups.push({ id: 'score_value', any: ['score', 'stars', '★', '/5', '/10', '10'] });
+  if (value.verdict || draft.verdict) keywordGroups.push({ id: 'verdict_value', any: ['verdict', 'takeaway', 'worth saving', 'worth it', 'the take'] });
+  const address = draft.contentPackage?.restaurantFacts?.address;
+  if (address) {
+    const addressText = String(address);
+    const streetMatch = addressText.match(/\b\d+\s+[^,]+/);
+    const suburbMatch = addressText.split(',')[1]?.trim();
+    keywordGroups.push({
+      id: 'address_value',
+      any: [
+        addressText,
+        streetMatch?.[0],
+        suburbMatch,
+        'melbourne vic',
+        'vic'
+      ].filter(Boolean)
+    });
+  }
 
   return { checks, keywordGroups };
 }
@@ -124,7 +158,8 @@ function evaluateDesignText({ designText, draft }) {
   for (const group of keywordGroups) {
     const hit = group.any.some((term) => text.includes(normalise(term)));
     if (hit) hookHits += 1;
-    else if (group.id === 'save_cta') issues.push(`Missing required hook/copy keyword group: ${group.id}`);
+    else if (['hook_value', 'save_cta', 'score_value', 'verdict_value', 'address_value'].includes(group.id)) issues.push(`Missing required hook/copy keyword group: ${group.id}`);
+    else if (['dish_value', 'price_value'].includes(group.id)) warnings.push(`Missing optional hook keyword group: ${group.id}`);
     else warnings.push(`Missing optional hook keyword group: ${group.id}`);
   }
 
